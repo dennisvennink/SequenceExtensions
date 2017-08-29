@@ -2,7 +2,7 @@
 
 ![](https://img.shields.io/badge/Language-Swift%204-F04C3E.svg) [![](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://github.com/dennisvennink/SequenceExtensions/blob/master/LICENSE.md)
 
-_SequenceExtensions_ is a library that adds various [lazily-implemented](https://en.wikipedia.org/wiki/Lazy_evaluation) extensions to the [`Sequence`](https://developer.apple.com/documentation/swift/sequence) protocol. Heavily inspired by Haskell's `Prelude` and Python's `itertools` libraries.
+_SequenceExtensions_ is a library that adds various [lazily-implemented](https://en.wikipedia.org/wiki/Lazy_evaluation) extensions to the [`Sequence`](https://developer.apple.com/documentation/swift/sequence) protocol. It only adds extensions for operations which have no (lazy) implementation in the standard library, should integrate well without adding any ambiguities and is well-documented and tested.
 
 ## Table of Contents
 
@@ -57,37 +57,45 @@ swift test -Xswiftc -D -Xswiftc DEBUG
 
 #### `++(_:_:)`
 
-Lazily appends the `Sequence` of the right-hand side to the `Sequence` on the left-hand side. If the `Sequence` on the left-hand side is not finite, the result is the `Sequence` on the left-hand side.
+Creates a lazily evaluated `Sequence` that appends the right-hand `Sequence` to the left-hand `Sequence`.
 
-##### Declarations
+##### **Attention**
+
+If the left-hand `Sequence` is not finite, the result is the left-hand `Sequence`.
+
+##### Declaration
 
 ```swift
 infix operator ++
 
-func ++ <T: Sequence> (lhs: T, rhs: T) -> LazyAppendSequence<T>
+func ++ <T: Sequence> (_ lhs: T, _ rhs: T) -> LazyAppendSequence<T>
 ```
 
-##### Examples
+##### Example
 
 ```swift
-let results = [1, 2] ++ [3, 4]
-let expectedResults = [1, 2, 3, 4]
+[1, 2] ++ [3, 4]
+// [1, 2, 3, 4]
 ```
 
 ##### Parameters
 
-- `lhs` The `Sequence` on the left-hand side.
-- `rhs` The `Sequence`  on the right-hand side.
+- `lhs` The left-hand `Sequence`.
+- `rhs` The right-hand `Sequence`.
 
 ##### Returns
 
-A lazy sequence that appends the `Sequence` of the right-hand side to the `Sequence` on the left-hand side. If the `Sequence` on the left-hand side is not finite, the result is the `Sequence` on the left-hand side.
+A lazily evaluated `Sequence` containing the elements from the right-hand `Sequence` appended to the left-hand `Sequence`.
 
 ### Free Functions
 
 #### `convolution(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`
 
-Creates a [convolution](https://en.wikipedia.org/wiki/Convolution_(computer_science)) as a lazy `Sequence` of n-tuples from two or more (up to six) `Sequence`s. If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`. Is identical to Swift's [`zip(_:_:)`](https://developer.apple.com/documentation/swift/1541125-zip), but supports arities up to 6.
+Creates a [convolution](https://en.wikipedia.org/wiki/Convolution_(computer_science)) from two or more (up to six) `Sequence`s using lazy evaluation. `convolution(_:_:)` is similar to `zip(_:_:)`, but returns a lazily evaluated `Sequence`.
+
+##### **Attention**
+
+If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
 
 ##### Declarations
 
@@ -114,72 +122,72 @@ func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Se
 ##### Examples
 
 ```swift
-let results = convolution([1, 2], [3, 4])
-let expectedResults = [(1, 3), (2, 4)]
+convolution([1, 2], [3, 4])
+// [(1, 3), (2, 4)]
 ```
 
 ```swift
-let results = convolution([1, 2], [3, 4], [5, 6])
-let expectedResults = [(1, 3, 5), (2, 4, 6)]
+convolution([1, 2], [3, 4], [5, 6])
+// [(1, 3, 5), (2, 4, 6)]
 ```
 
 ```swift
-let results = convolution([1, 2], [3, 4], [5, 6], [7, 8])
-let expectedResults = [(1, 3, 5, 7), (2, 4, 6, 8)]
+convolution([1, 2], [3, 4], [5, 6], [7, 8])
+// [(1, 3, 5, 7), (2, 4, 6, 8)]
 ```
 
 ```swift
-let results = convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10])
-let expectedResults = [(1, 3, 5, 7, 9), (2, 4, 6, 8, 10)]
+convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10])
+// [(1, 3, 5, 7, 9), (2, 4, 6, 8, 10)]
 ```
 
 ```swift
-let results = convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12])
-let expectedResults = [(1, 3, 5, 7, 9, 11), (2, 4, 6, 8, 10, 12)]
+convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12])
+// [(1, 3, 5, 7, 9, 11), (2, 4, 6, 8, 10, 12)]
 ```
 
 ##### Parameters
 
 - `sequence1` The first `Sequence`.
 - `sequence2` The second `Sequence`.
-- `sequence3` The third `Sequence` (from arity 3 and up).
-- `sequence4` The fourth `Sequence` (from arity 4 and up).
-- `sequence5` The fifth `Sequence` (from arity 5 and up).
-- `sequence6` The sixth `Sequence` (arity 6).
+- `sequence3` The third `Sequence` (≥ arity 3).
+- `sequence4` The fourth `Sequence` (≥ arity 4).
+- `sequence5` The fifth `Sequence` (≥ arity 5).
+- `sequence6` The sixth `Sequence` (= arity 6).
 
 ##### Returns
 
-A convolution as a lazy sequence of n-tuples.
+A convolution as a lazily evaluated `Sequence` of n-tuples.
 
 #### `product(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`
 
-Creates a [Cartesian product](https://en.wikipedia.org/wiki/Cartesian_product) as a lazy `Sequence` of n-tuples from two or more `Sequence`s (up to six).
+Creates a [Cartesian product](https://en.wikipedia.org/wiki/Cartesian_product) from two or more (up to six) `Sequence`s using lazy evaluation.
 
 ##### Examples
 
 ```swift
-let results = product([1, 2], [3, 4])
-let expectedResults = [(1, 3), (1, 4), (2, 3), (2, 4)]
+product([1, 2], [3, 4])
+// [(1, 3), (1, 4), (2, 3), (2, 4)]
 ```
 
 ```swift
-let results = product([1, 2], [3, 4], [5, 6])
-let expectedResults = [(1, 3, 5), (1, 3, 6), (1, 4, 5), (1, 4, 6), (2, 3, 5), (2, 3, 6), (2, 4, 5), (2, 4, 6)]
+product([1, 2], [3, 4], [5, 6]).take(4)
+// [(1, 3, 5), (1, 3, 6), (1, 4, 5), (1, 4, 6)]
 ```
 
 ```swift
-let results = product([1, 2], [3, 4], [5, 6], [7, 8])
-let expectedResults = [(1, 3, 5, 7), (1, 3, 5, 8), (1, 3, 6, 7), (1, 3, 6, 8), (1, 4, 5, 7), (1, 4, 5, 8), (1, 4, 6, 7), (1, 4, 6, 8), (2, 3, 5, 7), (2, 3, 5, 8), (2, 3, 6, 7), (2, 3, 6, 8), (2, 4, 5, 7), (2, 4, 5, 8), (2, 4, 6, 7), (2, 4, 6, 8)]
+product([1, 2], [3, 4], [5, 6], [7, 8]).take(4)
+// [(1, 3, 5, 7), (1, 3, 5, 8), (1, 3, 6, 7), (1, 3, 6, 8)]
 ```
 
 ```swift
-let results = product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10])
-let expectedResults = [(1, 3, 5, 7, 9), (1, 3, 5, 7, 10), (1, 3, 5, 8, 9), (1, 3, 5, 8, 10), (1, 3, 6, 7, 9), (1, 3, 6, 7, 10), (1, 3, 6, 8, 9), (1, 3, 6, 8, 10), (1, 4, 5, 7, 9), (1, 4, 5, 7, 10), (1, 4, 5, 8, 9), (1, 4, 5, 8, 10), (1, 4, 6, 7, 9), (1, 4, 6, 7, 10), (1, 4, 6, 8, 9), (1, 4, 6, 8, 10), (2, 3, 5, 7, 9), (2, 3, 5, 7, 10), (2, 3, 5, 8, 9), (2, 3, 5, 8, 10), (2, 3, 6, 7, 9), (2, 3, 6, 7, 10), (2, 3, 6, 8, 9), (2, 3, 6, 8, 10), (2, 4, 5, 7, 9), (2, 4, 5, 7, 10), (2, 4, 5, 8, 9), (2, 4, 5, 8, 10), (2, 4, 6, 7, 9), (2, 4, 6, 7, 10), (2, 4, 6, 8, 9), (2, 4, 6, 8, 10)]
+product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10]).take(4)
+// [(1, 3, 5, 7, 9), (1, 3, 5, 7, 10), (1, 3, 5, 8, 9), (1, 3, 5, 8, 10)]
 ```
 
 ```swift
-let results = product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12])
-let expectedResults = [(1, 3, 5, 7, 9, 11), (1, 3, 5, 7, 9, 12), (1, 3, 5, 7, 10, 11), (1, 3, 5, 7, 10, 12), (1, 3, 5, 8, 9, 11), (1, 3, 5, 8, 9, 12), (1, 3, 5, 8, 10, 11), (1, 3, 5, 8, 10, 12), (1, 3, 6, 7, 9, 11), (1, 3, 6, 7, 9, 12), (1, 3, 6, 7, 10, 11), (1, 3, 6, 7, 10, 12), (1, 3, 6, 8, 9, 11), (1, 3, 6, 8, 9, 12), (1, 3, 6, 8, 10, 11), (1, 3, 6, 8, 10, 12), (1, 4, 5, 7, 9, 11), (1, 4, 5, 7, 9, 12), (1, 4, 5, 7, 10, 11), (1, 4, 5, 7, 10, 12), (1, 4, 5, 8, 9, 11), (1, 4, 5, 8, 9, 12), (1, 4, 5, 8, 10, 11), (1, 4, 5, 8, 10, 12), (1, 4, 6, 7, 9, 11), (1, 4, 6, 7, 9, 12), (1, 4, 6, 7, 10, 11), (1, 4, 6, 7, 10, 12), (1, 4, 6, 8, 9, 11), (1, 4, 6, 8, 9, 12), (1, 4, 6, 8, 10, 11), (1, 4, 6, 8, 10, 12), (2, 3, 5, 7, 9, 11), (2, 3, 5, 7, 9, 12), (2, 3, 5, 7, 10, 11), (2, 3, 5, 7, 10, 12), (2, 3, 5, 8, 9, 11), (2, 3, 5, 8, 9, 12), (2, 3, 5, 8, 10, 11), (2, 3, 5, 8, 10, 12), (2, 3, 6, 7, 9, 11), (2, 3, 6, 7, 9, 12), (2, 3, 6, 7, 10, 11), (2, 3, 6, 7, 10, 12), (2, 3, 6, 8, 9, 11), (2, 3, 6, 8, 9, 12), (2, 3, 6, 8, 10, 11), (2, 3, 6, 8, 10, 12), (2, 4, 5, 7, 9, 11), (2, 4, 5, 7, 9, 12), (2, 4, 5, 7, 10, 11), (2, 4, 5, 7, 10, 12), (2, 4, 5, 8, 9, 11), (2, 4, 5, 8, 9, 12), (2, 4, 5, 8, 10, 11), (2, 4, 5, 8, 10, 12), (2, 4, 6, 7, 9, 11), (2, 4, 6, 7, 9, 12), (2, 4, 6, 7, 10, 11), (2, 4, 6, 7, 10, 12), (2, 4, 6, 8, 9, 11), (2, 4, 6, 8, 9, 12), (2, 4, 6, 8, 10, 11), (2, 4, 6, 8, 10, 12)]
+product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]).take(4)
+// [(1, 3, 5, 7, 9, 11), (1, 3, 5, 7, 9, 12), (1, 3, 5, 7, 10, 11), (1, 3, 5, 7, 10, 12)]
 ```
 
 ##### Declarations
@@ -208,20 +216,20 @@ func product <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequen
 
 - `sequence1` The first `Sequence`.
 - `sequence2` The second `Sequence`.
-- `sequence3` The third `Sequence` (from arity 3 and up).
-- `sequence4` The fourth `Sequence` (from arity 4 and up).
-- `sequence5` The fifth `Sequence` (from arity 5 and up).
-- `sequence6` The sixth `Sequence` (arity 6).
+- `sequence3` The third `Sequence` (≥ arity 3).
+- `sequence4` The fourth `Sequence` (≥ arity 4).
+- `sequence5` The fifth `Sequence` (≥ arity 5).
+- `sequence6` The sixth `Sequence` (= arity 6).
 
 ##### Returns
 
-A Cartesian product as a lazy `Sequence` of n-tuples.
+A product as a lazily evaluated `Sequence` of n-tuples.
 
 ### Property Extensions on `Sequence`
 
 #### `cycle`
 
-Turns any `Sequence` into a circular lazy `Sequence`, thereby infinitely repeating itself.
+Creates a lazily evaluated `Sequence` that infinitely repeats the elements of `self`.
 
 ##### Declaration
 
@@ -232,19 +240,17 @@ var cycle: LazyCycleSequence<Self>
 ##### Example
 
 ```swift
-let results = [1, 2, 3].cycle.take(first: 10)
-let expectedResults = [1, 2, 3, 1, 2, 3, 1, 2, 3, 1]
+[1, 2, 3].cycle.take(10)
+// [1, 2, 3, 1, 2, 3, 1, 2, 3, 1]
 ```
-
-##### Returns
-
-A lazy circular `Sequence` that infinitely repeats itself.
 
 ### Method Extensions on `Sequence`
 
 #### `drop(first:)`
 
-Drops the first number of elements of `self`.
+##### **Attention**
+
+If the number of elements to drop exceeds the number of elements in `self`, the result is an empty `Sequence`.
 
 ##### Declaration
 
@@ -255,21 +261,25 @@ func drop (first numberOfElements: Int) -> LazyDropFirstSequence<Self>
 ##### Example
 
 ```swift
-let results = [1, 2, 3, 4, 5].drop(first: 3)
-let expectedResults = [4, 5]
+[1, 2, 3, 4, 5].drop(first: 3)
+// [4, 5]
 ```
 
 ##### Parameters
 
-- `numberOfElements` An `Int` specifying the number of elements to drop from the start of `self`.
+- `numberOfElements` Specifies the first number of elements to drop from `self`.
 
 ##### Returns
 
-A lazy `Sequence` with the first number of elements dropped from `self`.
+A lazily evaluated `Sequence` containing all but the first number of elements of `self`.
 
 #### `drop(last:)`
 
-Drops the last number of elements of `self`. Should only be used with finite `Sequence`s.
+Creates a lazily evaluated `Sequence` containing all but the last number of elements of `self`.
+
+##### **Attention**
+
+If the number of elements to drop exceeds the number of elements in `self`, the result is an empty `Sequence`.
 
 ##### Declaration
 
@@ -280,21 +290,21 @@ func drop (last numberOfElements: Int) -> LazyDropLastSequence<Self>
 ##### Example
 
 ```swift
-let results = [1, 2, 3, 4, 5].drop(last: 3)
-let expectedResults = [1, 2]
+[1, 2, 3, 4, 5].drop(last: 3)
+// [1, 2]
 ```
 
 ##### Parameters
 
-- `numberOfElements` An `Int` specifying the number of elements to drop from the end of `self`.
+- `numberOfElements` Specifies the last number of elements to drop from `self`.
 
 ##### Returns
 
-A lazy `Sequence` with the last number of elements dropped from `self`.
+A lazily evaluated `Sequence` containing all but the last number of elements of `self`.
 
 #### `take(first:)`
 
-Takes the first number of elements from `self`. Is similar to [`prefix(_ maxLength:)`](https://developer.apple.com/documentation/swift/sequence/2886011-prefix), but `take(first:)` will actually guarantee to return a lazy `Sequence` when operating on a lazy `Sequence`<sup>[*](https://bugs.swift.org/browse/SR-5754)</sup>.
+Creates a lazily evaluated `Sequence` containing the first number of elements of `self`. Is similar to `prefix(_ maxLength:)`, but `take(first:)` will guarantee to return a lazy `Sequence` when operating on a lazy `Sequence`.
 
 ##### Declaration
 
@@ -305,21 +315,21 @@ func take (first numberOfElements: Int) -> LazyTakeFirstSequence<Self>
 ##### Example
 
 ```swift
-let results = [1, 2, 3, 4, 5].take(first: 3)
-let expectedResults = [1, 2, 3]
+[1, 2, 3, 4, 5].take(first: 3)
+// [1, 2, 3]
 ```
 
 ##### Parameters
 
-- `numberOfElements` An `Int` specifying the number of elements to take from the start of `self`.
+- `numberOfElements` Specifies the number of elements to take from the start of `self`.
 
 ##### Returns
 
-A lazy `Sequence` containing the first number of elements of `self`.
+A lazily evaluated `Sequence` that takes the number of elements from the start of `self`.
 
 #### `take(last:)`
 
-Takes the last number of elements from `self`. Should only be used with finite `Sequence`s.
+Creates a lazily evaluated `Sequence` containing the last number of elements of `self`.
 
 ##### Declaration
 
@@ -330,14 +340,14 @@ func take (last numberOfElements: Int) -> LazyTakeLastSequence<Self>
 ##### Example
 
 ```swift
-let results = [1, 2, 3, 4, 5].take(last: 3)
-let expectedResults = [3, 4, 5]
+[1, 2, 3, 4, 5].take(last: 3)
+// [3, 4, 5]
 ```
 
 ##### Parameters
 
-- `numberOfElements` An `Int` specifying the number of elements to take from the end of `self`.
+- `numberOfElements` Specifies the number of elements to take from the end of `self`.
 
 ##### Returns
 
-A lazy `Sequence` containing the last number of elements of `self`.
+A lazily evaluated `Sequence` that takes the number of elements from the end of `self`.
