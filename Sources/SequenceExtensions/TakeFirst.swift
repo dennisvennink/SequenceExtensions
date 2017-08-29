@@ -50,6 +50,17 @@ public struct LazyTakeFirstSequence <T: Sequence>: LazySequenceProtocol {
 }
 
 public extension Sequence {
+  /// Creates a lazily evaluated `Sequence` containing the first number of elements of `self`. Is similar to
+  /// `prefix(_ maxLength:)`, but `take(first:)` will guarantee to return a lazy `Sequence` when operating on a lazy
+  /// `Sequence`.
+  ///
+  ///     _ = [1, 2, 3, 4, 5].take(first: 3)
+  ///     // [1, 2, 3]
+  ///
+  /// - Parameters:
+  ///     - numberOfElements: Specifies the number of elements to take from the start of `self`.
+  ///
+  /// - Returns: A lazily evaluated `Sequence` that takes the number of elements from the start of `self`.
   func take (first numberOfElements: Int) -> LazyTakeFirstSequence<Self> {
     return LazyTakeFirstSequence(self, numberOfElements)
   }

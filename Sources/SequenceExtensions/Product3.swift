@@ -42,6 +42,19 @@ public struct LazyProduct3Sequence <T1: Sequence, T2: Sequence, T3: Sequence>: L
   }
 }
 
+/// Creates a [Cartesian product][1] from three `Sequence`s using lazy evaluation.
+///
+///     _ = product([1, 2], [3, 4], [5, 6]).take(first: 4)
+///     // [(1, 3, 5), (1, 3, 6), (1, 4, 5), (1, 4, 6)]
+///
+/// - Parameters:
+///     - sequence1: The first `Sequence`.
+///     - sequence2: The second `Sequence`.
+///     - sequence3: The third `Sequence`.
+///
+/// - Returns: A product as a lazily evaluated `Sequence` of 3-tuples.
+///
+/// [1]: https://en.wikipedia.org/wiki/Cartesian_product
 public func product <T1: Sequence, T2: Sequence, T3: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3) ->
     LazyProduct3Sequence<T1, T2, T3> {
   return LazyProduct3Sequence(sequence1, sequence2, sequence3)

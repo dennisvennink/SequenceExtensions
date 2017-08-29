@@ -36,6 +36,18 @@ public struct LazyProduct2Sequence <T1: Sequence, T2: Sequence>: LazySequencePro
   }
 }
 
+/// Creates a [Cartesian product][1] from two `Sequence`s using lazy evaluation.
+///
+///     _ = product([1, 2], [3, 4])
+///     // [(1, 3), (1, 4), (2, 3), (2, 4)]
+///
+/// - Parameters:
+///     - sequence1: The first `Sequence`.
+///     - sequence2: The second `Sequence`.
+///
+/// - Returns: A product as a lazily evaluated `Sequence` of 2-tuples.
+///
+/// [1]: https://en.wikipedia.org/wiki/Cartesian_product
 public func product <T1: Sequence, T2: Sequence> (_ sequence1: T1, _ sequence2: T2) -> LazyProduct2Sequence<T1, T2> {
   return LazyProduct2Sequence(sequence1, sequence2)
 }

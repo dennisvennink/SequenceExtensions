@@ -4,7 +4,7 @@ public struct LazyAppendIterator <T: IteratorProtocol>: IteratorProtocol {
   private var iterator1: T
   private var iterator2: T
   private var reachedEndOfIterator1 = false
-  private var reachedEndOfIterator2 = false
+  private var reachedEnd = false
 
   internal init (_ iterator1: T, _ iterator2: T) {
     self.iterator1 = iterator1
@@ -16,7 +16,7 @@ public struct LazyAppendIterator <T: IteratorProtocol>: IteratorProtocol {
       iterationCount += 1
     #endif
 
-    if self.reachedEndOfIterator2 {
+    if self.reachedEnd {
       return nil
     }
 
@@ -24,16 +24,18 @@ public struct LazyAppendIterator <T: IteratorProtocol>: IteratorProtocol {
 
     if !self.reachedEndOfIterator1 {
       next = self.iterator1.next()
+
+      if next == nil {
+        self.reachedEndOfIterator1 = true
+      }
     }
 
     if next == nil {
-      self.reachedEndOfIterator1 = true
-
       next = self.iterator2.next()
-    }
 
-    if next == nil {
-      self.reachedEndOfIterator2 = true
+      if next == nil {
+        self.reachedEnd = true
+      }
     }
 
     return next
@@ -58,6 +60,19 @@ public struct LazyAppendSequence <T: Sequence>: LazySequenceProtocol {
 
 infix operator ++
 
-func ++ <T: Sequence> (lhs: T, rhs: T) -> LazyAppendSequence<T> {
+/// Creates a lazily evaluated `Sequence` that appends the right-hand `Sequence` to the left-hand `Sequence`.
+///
+///     _ = [1, 2] ++ [3, 4]
+///     // [1, 2, 3, 4]
+///
+/// - Attention: If the left-hand `Sequence` is not finite, the result is the left-hand `Sequence`.
+///
+/// - Parameters:
+///     - lhs: The left-hand `Sequence`.
+///     - rhs: The right-hand `Sequence`.
+///
+/// - Returns: A lazily evaluated `Sequence` containing the elements from the right-hand `Sequence` appended to the
+///            left-hand `Sequence`.
+func ++ <T: Sequence> (_ lhs: T, _ rhs: T) -> LazyAppendSequence<T> {
   return LazyAppendSequence(lhs, rhs)
 }

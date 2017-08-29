@@ -63,6 +63,17 @@ public struct LazyDropLastSequence <T: Sequence>: LazySequenceProtocol {
 }
 
 public extension Sequence {
+  /// Creates a lazily evaluated `Sequence` containing all but the last number of elements of `self`.
+  ///
+  ///     _ = [1, 2, 3, 4, 5].drop(last: 3)
+  ///     // [1, 2]
+  ///
+  /// - Attention: If the number of elements to drop exceeds the number of elements in `self`, the result is an empty
+  ///              `Sequence`.
+  /// - Parameters:
+  ///     - numberOfElements: Specifies the last number of elements to drop from `self`.
+  ///
+  /// - Returns: A lazily evaluated `Sequence` containing all but the last number of elements of `self`.
   func drop (last numberOfElements: Int) -> LazyDropLastSequence<Self> {
     return LazyDropLastSequence(self, numberOfElements)
   }

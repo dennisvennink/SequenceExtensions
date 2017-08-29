@@ -40,6 +40,10 @@ public struct LazyCycleSequence <T: Sequence>: LazySequenceProtocol {
 }
 
 public extension Sequence {
+  /// Creates a lazily evaluated `Sequence` that infinitely repeats the elements of `self`.
+  ///
+  ///     _ = [1, 2, 3].cycle.take(10)
+  ///     // [1, 2, 3, 1, 2, 3, 1, 2, 3, 1]
   var cycle: LazyCycleSequence<Self> {
     return LazyCycleSequence(self)
   }

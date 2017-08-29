@@ -59,6 +59,17 @@ public struct LazyDropFirstSequence <T: Sequence>: LazySequenceProtocol {
 }
 
 public extension Sequence {
+  /// Creates a lazily evaluated `Sequence` containing all but the first number of elements of `self`.
+  ///
+  ///     _ = [1, 2, 3, 4, 5].drop(first: 3)
+  ///     // [4, 5]
+  ///
+  /// - Attention: If the number of elements to drop exceeds the number of elements in `self`, the result is an empty
+  ///              `Sequence`.
+  /// - Parameters:
+  ///     - numberOfElements: Specifies the first number of elements to drop from `self`.
+  ///
+  /// - Returns: A lazily evaluated `Sequence` containing all but the first number of elements of `self`.
   func drop (first numberOfElements: Int) -> LazyDropFirstSequence<Self> {
     return LazyDropFirstSequence(self, numberOfElements)
   }

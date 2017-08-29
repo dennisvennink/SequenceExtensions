@@ -67,6 +67,15 @@ public struct LazyTakeLastSequence <T: Sequence>: LazySequenceProtocol {
 }
 
 public extension Sequence {
+  /// Creates a lazily evaluated `Sequence` containing the last number of elements of `self`.
+  ///
+  ///     _ = [1, 2, 3, 4, 5].take(last: 3)
+  ///     // [3, 4, 5]
+  ///
+  /// - Parameters:
+  ///     - numberOfElements: Specifies the number of elements to take from the end of `self`.
+  ///
+  /// - Returns: A lazily evaluated `Sequence` that takes the number of elements from the end of `self`.
   func take (last numberOfElements: Int) -> LazyTakeLastSequence<Self> {
     return LazyTakeLastSequence(self, numberOfElements)
   }

@@ -46,6 +46,20 @@ public struct LazyProduct4Sequence <T1: Sequence, T2: Sequence, T3: Sequence, T4
   }
 }
 
+/// Creates a [Cartesian product][1] from four `Sequence`s using lazy evaluation.
+///
+///     _ = product([1, 2], [3, 4], [5, 6], [7, 8]).take(first: 4)
+///     // [(1, 3, 5, 7), (1, 3, 5, 8), (1, 3, 6, 7), (1, 3, 6, 8)]
+///
+/// - Parameters:
+///     - sequence1: The first `Sequence`.
+///     - sequence2: The second `Sequence`.
+///     - sequence3: The third `Sequence`.
+///     - sequence4: The fourth `Sequence`.
+///
+/// - Returns: A product as a lazily evaluated `Sequence` of 4-tuples.
+///
+/// [1]: https://en.wikipedia.org/wiki/Cartesian_product
 public func product <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence> (_ sequence1: T1, _ sequence2: T2,
     _ sequence3: T3, _ sequence4: T4) -> LazyProduct4Sequence<T1, T2, T3, T4> {
   return LazyProduct4Sequence(sequence1, sequence2, sequence3, sequence4)
