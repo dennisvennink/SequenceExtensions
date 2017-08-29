@@ -59,9 +59,16 @@ swift test -Xswiftc -D -Xswiftc DEBUG
 
 Creates a lazily evaluated `Sequence` that appends the right-hand `Sequence` to the left-hand `Sequence`.
 
-##### **Attention**
+##### Attention
 
 If the left-hand `Sequence` is not finite, the result is the left-hand `Sequence`.
+
+##### Example
+
+```swift
+[1, 2] ++ [3, 4]
+// [1, 2, 3, 4]
+```
 
 ##### Declaration
 
@@ -69,13 +76,6 @@ If the left-hand `Sequence` is not finite, the result is the left-hand `Sequence
 infix operator ++
 
 func ++ <T: Sequence> (_ lhs: T, _ rhs: T) -> LazyAppendSequence<T>
-```
-
-##### Example
-
-```swift
-[1, 2] ++ [3, 4]
-// [1, 2, 3, 4]
 ```
 
 ##### Parameters
@@ -93,31 +93,9 @@ A lazily evaluated `Sequence` containing the elements from the right-hand `Seque
 
 Creates a [convolution](https://en.wikipedia.org/wiki/Convolution_(computer_science)) from two or more (up to six) `Sequence`s using lazy evaluation. `convolution(_:_:)` is similar to `zip(_:_:)`, but returns a lazily evaluated `Sequence`.
 
-##### **Attention**
+##### Attention
 
 If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
-
-##### Declarations
-
-```swift
-func convolution <T1: Sequence, T2: Sequence> (_ sequence1: T1, _ sequence2: T2) -> LazyConvolution2Sequence<T1, T2>
-```
-
-```swift
-func convolution <T1: Sequence, T2: Sequence, T3: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3) -> LazyConvolution3Sequence<T1, T2, T3>
-```
-
-```swift
-func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4) -> LazyConvolution4Sequence<T1, T2, T3, T4>
-```
-
-```swift
-func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5) -> LazyConvolution5Sequence<T1, T2, T3, T4, T5>
-```
-
-```swift
-func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence, T6: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5, _ sequence6: T6) -> LazyConvolution6Sequence<T1, T2, T3, T4, T5, T6>
-```
 
 ##### Examples
 
@@ -144,6 +122,28 @@ convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10])
 ```swift
 convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12])
 // [(1, 3, 5, 7, 9, 11), (2, 4, 6, 8, 10, 12)]
+```
+
+##### Declarations
+
+```swift
+func convolution <T1: Sequence, T2: Sequence> (_ sequence1: T1, _ sequence2: T2) -> LazyConvolution2Sequence<T1, T2>
+```
+
+```swift
+func convolution <T1: Sequence, T2: Sequence, T3: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3) -> LazyConvolution3Sequence<T1, T2, T3>
+```
+
+```swift
+func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4) -> LazyConvolution4Sequence<T1, T2, T3, T4>
+```
+
+```swift
+func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5) -> LazyConvolution5Sequence<T1, T2, T3, T4, T5>
+```
+
+```swift
+func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence, T6: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5, _ sequence6: T6) -> LazyConvolution6Sequence<T1, T2, T3, T4, T5, T6>
 ```
 
 ##### Parameters
@@ -231,12 +231,6 @@ A product as a lazily evaluated `Sequence` of n-tuples.
 
 Creates a lazily evaluated `Sequence` that infinitely repeats the elements of `self`.
 
-##### Declaration
-
-```swift
-var cycle: LazyCycleSequence<Self>
-```
-
 ##### Example
 
 ```swift
@@ -244,25 +238,31 @@ var cycle: LazyCycleSequence<Self>
 // [1, 2, 3, 1, 2, 3, 1, 2, 3, 1]
 ```
 
+##### Declaration
+
+```swift
+var cycle: LazyCycleSequence<Self>
+```
+
 ### Method Extensions on `Sequence`
 
 #### `drop(first:)`
 
-##### **Attention**
+##### Attention
 
 If the number of elements to drop exceeds the number of elements in `self`, the result is an empty `Sequence`.
-
-##### Declaration
-
-```swift
-func drop (first numberOfElements: Int) -> LazyDropFirstSequence<Self>
-```
 
 ##### Example
 
 ```swift
 [1, 2, 3, 4, 5].drop(first: 3)
 // [4, 5]
+```
+
+##### Declaration
+
+```swift
+func drop (first numberOfElements: Int) -> LazyDropFirstSequence<Self>
 ```
 
 ##### Parameters
@@ -277,21 +277,21 @@ A lazily evaluated `Sequence` containing all but the first number of elements of
 
 Creates a lazily evaluated `Sequence` containing all but the last number of elements of `self`.
 
-##### **Attention**
+##### Attention
 
 If the number of elements to drop exceeds the number of elements in `self`, the result is an empty `Sequence`.
-
-##### Declaration
-
-```swift
-func drop (last numberOfElements: Int) -> LazyDropLastSequence<Self>
-```
 
 ##### Example
 
 ```swift
 [1, 2, 3, 4, 5].drop(last: 3)
 // [1, 2]
+```
+
+##### Declaration
+
+```swift
+func drop (last numberOfElements: Int) -> LazyDropLastSequence<Self>
 ```
 
 ##### Parameters
@@ -306,17 +306,17 @@ A lazily evaluated `Sequence` containing all but the last number of elements of 
 
 Creates a lazily evaluated `Sequence` containing the first number of elements of `self`. Is similar to `prefix(_ maxLength:)`, but `take(first:)` will guarantee to return a lazy `Sequence` when operating on a lazy `Sequence`.
 
-##### Declaration
-
-```swift
-func take (first numberOfElements: Int) -> LazyTakeFirstSequence<Self>
-```
-
 ##### Example
 
 ```swift
 [1, 2, 3, 4, 5].take(first: 3)
 // [1, 2, 3]
+```
+
+##### Declaration
+
+```swift
+func take (first numberOfElements: Int) -> LazyTakeFirstSequence<Self>
 ```
 
 ##### Parameters
@@ -331,17 +331,17 @@ A lazily evaluated `Sequence` that takes the number of elements from the start o
 
 Creates a lazily evaluated `Sequence` containing the last number of elements of `self`.
 
-##### Declaration
-
-```swift
-func take (last numberOfElements: Int) -> LazyTakeLastSequence<Self>
-```
-
 ##### Example
 
 ```swift
 [1, 2, 3, 4, 5].take(last: 3)
 // [3, 4, 5]
+```
+
+##### Declaration
+
+```swift
+func take (last numberOfElements: Int) -> LazyTakeLastSequence<Self>
 ```
 
 ##### Parameters
