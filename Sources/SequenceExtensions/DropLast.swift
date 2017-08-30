@@ -63,7 +63,8 @@ public struct LazyDropLastSequence <T: Sequence>: LazySequenceProtocol {
 }
 
 public extension LazySequenceProtocol {
-  /// Creates a lazily evaluated `Sequence` containing all but the last number of elements of `self`.
+  /// Creates a lazily evaluated `Sequence` containing all but the last number of elements of `self`. Unlike
+  /// `removeLast(_ n)`, `drop(first:)` is non-mutating.
   ///
   ///     print(Array([1, 2, 3, 4, 5].lazy.drop(last: 3)))
   ///     // [1, 2]

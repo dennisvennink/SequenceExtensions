@@ -60,7 +60,8 @@ public struct LazyAppendSequence <T: Sequence>: LazySequenceProtocol {
 
 infix operator ++
 
-/// Creates a lazily evaluated `Sequence` that appends the right-hand `Sequence` to the left-hand `Sequence`.
+/// Creates a lazily evaluated `Sequence` that appends the right-hand `Sequence` to the left-hand `Sequence`. Unlike
+/// `+(_:_:)`, `++(_:_:)` will guarantee to return a lazy `Sequence` when operating on a lazy `Sequence`.
 ///
 ///     print(Array([1, 2] ++ [3, 4]))
 ///     // [1, 2, 3, 4]

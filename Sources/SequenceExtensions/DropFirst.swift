@@ -59,7 +59,8 @@ public struct LazyDropFirstSequence <T: LazySequenceProtocol>: LazySequenceProto
 }
 
 public extension LazySequenceProtocol {
-  /// Creates a lazily evaluated `Sequence` containing all but the first number of elements of `self`.
+  /// Creates a lazily evaluated `Sequence` containing all but the first number of elements of `self`. Unlike
+  /// `removeFirst(_ n)`, `drop(first:)` is non-mutating.
   ///
   ///     print(Array([1, 2, 3, 4, 5].lazy.drop(first: 3)))
   ///     // [4, 5]

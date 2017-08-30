@@ -50,8 +50,8 @@ public struct LazyTakeFirstSequence <T: LazySequenceProtocol>: LazySequenceProto
 }
 
 public extension LazySequenceProtocol {
-  /// Creates a lazily evaluated `Sequence` containing the first number of elements of `self`. Is similar to
-  /// `prefix(_ maxLength:)`, but `take(first:)` will guarantee to return a lazy `Sequence` when operating on a lazy
+  /// Creates a lazily evaluated `Sequence` containing the first number of elements of `self`. Unlike
+  /// `prefix(_ maxLength:)`, `take(first:)` will guarantee to return a lazy `Sequence` when operating on a lazy
   /// `Sequence`.
   ///
   ///     print(Array([1, 2, 3, 4, 5].lazy.take(first: 3)))

@@ -57,7 +57,7 @@ swift test -Xswiftc -D -Xswiftc DEBUG
 
 #### `++(_:_:)`
 
-Creates a lazily evaluated `Sequence` that appends the right-hand `Sequence` to the left-hand `Sequence`.
+Creates a lazily evaluated `Sequence` that appends the right-hand `Sequence` to the left-hand `Sequence`. Unlike `+(_:_:)`, `++(_:_:)` will guarantee to return a lazy `Sequence` when operating on a lazy `Sequence`.
 
 ##### Attention
 
@@ -254,7 +254,7 @@ var cycle: LazyCycleSequence<Self>
 
 #### `drop(first:)`
 
-Creates a lazily evaluated `Sequence` containing all but the first number of elements of `self`.
+Creates a lazily evaluated `Sequence` containing all but the first number of elements of `self`. Unlike `removeFirst(_ n)`, `drop(first:)` is non-mutating.
 
 ##### Attention
 
@@ -262,7 +262,9 @@ If the number of elements to drop exceeds the number of elements in `self`, the 
 
 ##### Precondition
 
-`numberOfElements >= 0`
+```swift
+numberOfElements >= 0
+```
 
 ##### Example
 
@@ -287,7 +289,7 @@ A lazily evaluated `Sequence` containing all but the first number of elements of
 
 #### `drop(last:)`
 
-Creates a lazily evaluated `Sequence` containing all but the last number of elements of `self`.
+Creates a lazily evaluated `Sequence` containing all but the last number of elements of `self`. Unlike `removeLast(_ n)`, `drop(first:)` is non-mutating.
 
 ##### Attention
 
@@ -295,7 +297,9 @@ If the number of elements to drop exceeds the number of elements in `self`, the 
 
 ##### Precondition
 
-`numberOfElements >= 0`
+```swift
+numberOfElements >= 0
+```
 
 ##### Example
 
@@ -320,7 +324,7 @@ A lazily evaluated `Sequence` containing all but the last number of elements of 
 
 #### `take(first:)`
 
-Creates a lazily evaluated `Sequence` containing the first number of elements of `self`. Is similar to `prefix(_ maxLength:)`, but `take(first:)` will guarantee to return a lazy `Sequence` when operating on a lazy `Sequence`.
+Creates a lazily evaluated `Sequence` containing the first number of elements of `self`. Unlike `prefix(_ maxLength:)`, `take(first:)` will guarantee to return a lazy `Sequence` when operating on a lazy `Sequence`.
 
 ##### Example
 
@@ -331,7 +335,9 @@ print(Array([1, 2, 3, 4, 5].lazy.take(first: 3)))
 
 ##### Precondition
 
-`numberOfElements >= 0`
+```swift
+numberOfElements >= 0
+```
 
 ##### Declaration
 
@@ -349,7 +355,7 @@ A lazily evaluated `Sequence` that takes the number of elements from the start o
 
 #### `take(last:)`
 
-Creates a lazily evaluated `Sequence` containing the last number of elements of `self`.
+Creates a lazily evaluated `Sequence` containing the last number of elements of `self`. Unlike `suffix(_ maxLength:)`, `take(first:)` will guarantee to return a lazy `Sequence` when operating on a lazy `Sequence`.
 
 ##### Example
 
@@ -360,7 +366,9 @@ print(Array([1, 2, 3, 4, 5].lazy.take(last: 3)))
 
 ##### Precondition
 
-`numberOfElements >= 0`
+```swift
+numberOfElements >= 0
+```
 
 ##### Declaration
 

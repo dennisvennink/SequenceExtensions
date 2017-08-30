@@ -67,7 +67,9 @@ public struct LazyTakeLastSequence <T: LazySequenceProtocol>: LazySequenceProtoc
 }
 
 public extension LazySequenceProtocol {
-  /// Creates a lazily evaluated `Sequence` containing the last number of elements of `self`.
+  /// Creates a lazily evaluated `Sequence` containing the last number of elements of `self`. Unlike
+  /// `suffix(_ maxLength:)`, `take(first:)` will guarantee to return a lazy `Sequence` when operating on a lazy
+  /// `Sequence`.
   ///
   ///     print(Array([1, 2, 3, 4, 5].lazy.take(last: 3)))
   ///     // [3, 4, 5]
