@@ -53,20 +53,20 @@ public struct LazyConvolution3Sequence <T1: Sequence, T2: Sequence, T3: Sequence
 
 /// Creates a [convolution][1] from three `Sequence`s using lazy evaluation.
 ///
-///     _ = convolution([1, 2], [3, 4], [5, 6])
+///     print(Array(convolution([1, 2], [3, 4], [5, 6])))
 ///     // [(1, 3, 5), (2, 4, 6)]
 ///
-/// - Attention: If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the
-///              shortest `Sequence`.
+/// [1]: https://en.wikipedia.org/wiki/Convolution_(computer_science)
 ///
+/// - Attention:
+///     - If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest
+///       `Sequence`.
+///     - Returns a lazy `Sequence`.
 /// - Parameters:
 ///     - sequence1: The first `Sequence`.
 ///     - sequence2: The second `Sequence`.
 ///     - sequence3: The third `Sequence`.
-///
 /// - Returns: A convolution as a lazily evaluated `Sequence` of 3-tuples.
-///
-/// [1]: https://en.wikipedia.org/wiki/Convolution_(computer_science)
 public func convolution <T1: Sequence, T2: Sequence, T3: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3)
     -> LazyConvolution3Sequence<T1, T2, T3> {
   return LazyConvolution3Sequence(sequence1, sequence2, sequence3)

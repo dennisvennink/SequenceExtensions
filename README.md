@@ -1,8 +1,8 @@
 # SequenceExtensions
 
-![](https://img.shields.io/badge/Language-Swift%204-F04C3E.svg) [![](https://img.shields.io/badge/License-MIT-lightgrey.svg)](https://github.com/dennisvennink/SequenceExtensions/blob/master/LICENSE.md)
+![][language-badge] [![][license-badge]][license]
 
-_SequenceExtensions_ is a library that adds various [lazily-implemented](https://en.wikipedia.org/wiki/Lazy_evaluation) extensions to the [`Sequence`](https://developer.apple.com/documentation/swift/sequence) protocol. It only adds extensions for operations which have no (lazy) implementation in the standard library, should integrate well without adding any ambiguities and is well-documented and tested.
+_SequenceExtensions_ is a library that adds various extensions to the [`LazySequenceProtocol`][lazysequenceprotocol] and [`Sequence`][sequence] protocols. It only adds extensions for operations which have no implementation in the standard library, should integrate well without adding any ambiguities and is well-documented and tested.
 
 ## Table of Contents
 
@@ -15,9 +15,9 @@ _SequenceExtensions_ is a library that adds various [lazily-implemented](https:/
     - [Free Functions](#free-functions)
         - [`convolution(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`](#convolution-__-___-____-_____-______-)
         - [`product(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`](#product-__-___-____-_____-______-)
-    - [Property Extensions on `Sequence`](#property-extensions-on-sequence)
+    - [Property Extensions on `LazySequenceProtocol`](#property-extensions-on-lazysequenceprotocol)
         - [`cycle`](#cycle)
-    - [Method Extensions on `Sequence`](#method-extensions-on-sequence)
+    - [Method Extensions on `LazySequenceProtocol`](#method-extensions-on-lazysequenceprotocol)
         - `drop(` [`first:`](#dropfirst) [`last:`](#droplast) `)`
         - `take(` [`first:`](#takefirst) [`last:`](#takelast) `)`
 
@@ -61,12 +61,13 @@ Creates a lazily evaluated `Sequence` that appends the right-hand `Sequence` to 
 
 ##### Attention
 
-If the left-hand `Sequence` is not finite, the result is the left-hand `Sequence`.
+- If the left-hand `Sequence` is not finite, the result is the left-hand `Sequence`.
+- Returns a lazy `Sequence`.
 
 ##### Example
 
 ```swift
-[1, 2] ++ [3, 4]
+print(Array([1, 2] ++ [3, 4]))
 // [1, 2, 3, 4]
 ```
 
@@ -91,36 +92,37 @@ A lazily evaluated `Sequence` containing the elements from the right-hand `Seque
 
 #### `convolution(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`
 
-Creates a [convolution](https://en.wikipedia.org/wiki/Convolution_(computer_science)) from two or more (up to six) `Sequence`s using lazy evaluation. `convolution(_:_:)` is similar to `zip(_:_:)`, but returns a lazily evaluated `Sequence`.
+Creates a [convolution][convolution] from two or more (up to six) `Sequence`s using lazy evaluation. `convolution(_:_:)` is similar to `zip(_:_:)`, but returns a lazily evaluated `Sequence`.
 
 ##### Attention
 
-If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
+- If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
+- Returns a lazy `Sequence`.
 
 ##### Examples
 
 ```swift
-convolution([1, 2], [3, 4])
+print(Array(convolution([1, 2], [3, 4])))
 // [(1, 3), (2, 4)]
 ```
 
 ```swift
-convolution([1, 2], [3, 4], [5, 6])
+print(Array(convolution([1, 2], [3, 4], [5, 6])))
 // [(1, 3, 5), (2, 4, 6)]
 ```
 
 ```swift
-convolution([1, 2], [3, 4], [5, 6], [7, 8])
+print(Array(convolution([1, 2], [3, 4], [5, 6], [7, 8])))
 // [(1, 3, 5, 7), (2, 4, 6, 8)]
 ```
 
 ```swift
-convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10])
+print(Array(convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10])))
 // [(1, 3, 5, 7, 9), (2, 4, 6, 8, 10)]
 ```
 
 ```swift
-convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12])
+print(Array(convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12])))
 // [(1, 3, 5, 7, 9, 11), (2, 4, 6, 8, 10, 12)]
 ```
 
@@ -161,32 +163,36 @@ A convolution as a lazily evaluated `Sequence` of n-tuples.
 
 #### `product(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`
 
-Creates a [Cartesian product](https://en.wikipedia.org/wiki/Cartesian_product) from two or more (up to six) `Sequence`s using lazy evaluation.
+Creates a [Cartesian product][cartesian-product] from two or more (up to six) `Sequence`s using lazy evaluation.
+
+##### Attention
+
+Returns a lazy `Sequence`.
 
 ##### Examples
 
 ```swift
-product([1, 2], [3, 4])
+print(Array(product([1, 2], [3, 4])))
 // [(1, 3), (1, 4), (2, 3), (2, 4)]
 ```
 
 ```swift
-product([1, 2], [3, 4], [5, 6]).take(4)
+print(Array(product([1, 2], [3, 4], [5, 6]).take(4)))
 // [(1, 3, 5), (1, 3, 6), (1, 4, 5), (1, 4, 6)]
 ```
 
 ```swift
-product([1, 2], [3, 4], [5, 6], [7, 8]).take(4)
+print(Array(product([1, 2], [3, 4], [5, 6], [7, 8]).take(4)))
 // [(1, 3, 5, 7), (1, 3, 5, 8), (1, 3, 6, 7), (1, 3, 6, 8)]
 ```
 
 ```swift
-product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10]).take(4)
+print(Array(product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10]).take(4)))
 // [(1, 3, 5, 7, 9), (1, 3, 5, 7, 10), (1, 3, 5, 8, 9), (1, 3, 5, 8, 10)]
 ```
 
 ```swift
-product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]).take(4)
+print(Array(product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]).take(4)))
 // [(1, 3, 5, 7, 9, 11), (1, 3, 5, 7, 9, 12), (1, 3, 5, 7, 10, 11), (1, 3, 5, 7, 10, 12)]
 ```
 
@@ -225,7 +231,7 @@ func product <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequen
 
 A product as a lazily evaluated `Sequence` of n-tuples.
 
-### Property Extensions on `Sequence`
+### Property Extensions on `LazySequenceProtocol`
 
 #### `cycle`
 
@@ -234,7 +240,7 @@ Creates a lazily evaluated `Sequence` that infinitely repeats the elements of `s
 ##### Example
 
 ```swift
-[1, 2, 3].cycle.take(10)
+print(Array([1, 2, 3].lazy.cycle.take(10)))
 // [1, 2, 3, 1, 2, 3, 1, 2, 3, 1]
 ```
 
@@ -244,18 +250,24 @@ Creates a lazily evaluated `Sequence` that infinitely repeats the elements of `s
 var cycle: LazyCycleSequence<Self>
 ```
 
-### Method Extensions on `Sequence`
+### Method Extensions on `LazySequenceProtocol`
 
 #### `drop(first:)`
+
+Creates a lazily evaluated `Sequence` containing all but the first number of elements of `self`.
 
 ##### Attention
 
 If the number of elements to drop exceeds the number of elements in `self`, the result is an empty `Sequence`.
 
+##### Precondition
+
+`numberOfElements >= 0`
+
 ##### Example
 
 ```swift
-[1, 2, 3, 4, 5].drop(first: 3)
+print(Array([1, 2, 3, 4, 5].lazy.drop(first: 3)))
 // [4, 5]
 ```
 
@@ -281,10 +293,14 @@ Creates a lazily evaluated `Sequence` containing all but the last number of elem
 
 If the number of elements to drop exceeds the number of elements in `self`, the result is an empty `Sequence`.
 
+##### Precondition
+
+`numberOfElements >= 0`
+
 ##### Example
 
 ```swift
-[1, 2, 3, 4, 5].drop(last: 3)
+print(Array([1, 2, 3, 4, 5].lazy.drop(last: 3)))
 // [1, 2]
 ```
 
@@ -309,9 +325,13 @@ Creates a lazily evaluated `Sequence` containing the first number of elements of
 ##### Example
 
 ```swift
-[1, 2, 3, 4, 5].take(first: 3)
+print(Array([1, 2, 3, 4, 5].lazy.take(first: 3)))
 // [1, 2, 3]
 ```
+
+##### Precondition
+
+`numberOfElements >= 0`
 
 ##### Declaration
 
@@ -334,9 +354,13 @@ Creates a lazily evaluated `Sequence` containing the last number of elements of 
 ##### Example
 
 ```swift
-[1, 2, 3, 4, 5].take(last: 3)
+print(Array([1, 2, 3, 4, 5].lazy.take(last: 3)))
 // [3, 4, 5]
 ```
+
+##### Precondition
+
+`numberOfElements >= 0`
 
 ##### Declaration
 
@@ -351,3 +375,14 @@ func take (last numberOfElements: Int) -> LazyTakeLastSequence<Self>
 ##### Returns
 
 A lazily evaluated `Sequence` that takes the number of elements from the end of `self`.
+
+<!-- Images -->
+[language-badge]: https://img.shields.io/badge/Language-Swift%204-F04C3E.svg
+[license-badge]: https://img.shields.io/badge/License-MIT-lightgrey.svg
+
+<!-- Links -->
+[license]: https://github.com/dennisvennink/SequenceExtensions/blob/master/LICENSE.md
+[lazysequenceprotocol]: https://developer.apple.com/documentation/swift/lazysequenceprotocol
+[sequence]: https://developer.apple.com/documentation/swift/sequence
+[convolution]: https://en.wikipedia.org/wiki/Convolution_(computer_science)
+[cartesian-product]: https://en.wikipedia.org/wiki/Cartesian_product

@@ -12,17 +12,17 @@
     }
 
     func testShouldReturnValidResults () {
-      self.validate(Array([1, 2, 3].take(first: 0)), against: [Int]())
-      self.validate(Array([1, 2, 3].take(first: 1)), against: [1])
-      self.validate(Array([1, 2, 3].take(first: 2)), against: [1, 2])
-      self.validate(Array([1, 2, 3].take(first: 3)), against: [1, 2, 3])
-      self.validate(Array([1, 2, 3].take(first: 4)), against: [1, 2, 3])
+      self.validate(Array([1, 2, 3].lazy.take(first: 0)), against: [Int]())
+      self.validate(Array([1, 2, 3].lazy.take(first: 1)), against: [1])
+      self.validate(Array([1, 2, 3].lazy.take(first: 2)), against: [1, 2])
+      self.validate(Array([1, 2, 3].lazy.take(first: 3)), against: [1, 2, 3])
+      self.validate(Array([1, 2, 3].lazy.take(first: 4)), against: [1, 2, 3])
     }
 
     func testResultsShouldBeLazyEvaluated () {
       iterationCount = 0
 
-      _ = [1, 2, 3].take(first: 3)
+      _ = [1, 2, 3].lazy.take(first: 3)
 
       XCTAssertEqual(iterationCount, 0)
     }

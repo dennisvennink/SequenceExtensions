@@ -52,7 +52,7 @@ public struct LazyTakeLastIterator <T: IteratorProtocol>: IteratorProtocol {
   }
 }
 
-public struct LazyTakeLastSequence <T: Sequence>: LazySequenceProtocol {
+public struct LazyTakeLastSequence <T: LazySequenceProtocol>: LazySequenceProtocol {
   public typealias Iterator = LazyTakeLastIterator<T.Iterator>
 
   private let iterator: Iterator
@@ -66,15 +66,15 @@ public struct LazyTakeLastSequence <T: Sequence>: LazySequenceProtocol {
   }
 }
 
-public extension Sequence {
+public extension LazySequenceProtocol {
   /// Creates a lazily evaluated `Sequence` containing the last number of elements of `self`.
   ///
-  ///     _ = [1, 2, 3, 4, 5].take(last: 3)
+  ///     print(Array([1, 2, 3, 4, 5].lazy.take(last: 3)))
   ///     // [3, 4, 5]
   ///
+  /// - Precondition: `numberOfElements >= 0`
   /// - Parameters:
   ///     - numberOfElements: Specifies the number of elements to take from the end of `self`.
-  ///
   /// - Returns: A lazily evaluated `Sequence` that takes the number of elements from the end of `self`.
   func take (last numberOfElements: Int) -> LazyTakeLastSequence<Self> {
     return LazyTakeLastSequence(self, numberOfElements)

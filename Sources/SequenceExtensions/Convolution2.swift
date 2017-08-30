@@ -48,19 +48,19 @@ public struct LazyConvolution2Sequence <T1: Sequence, T2: Sequence>: LazySequenc
 /// Creates a [convolution][1] from two `Sequence`s using lazy evaluation. Is similar to `zip(_:_:)`, but returns a
 /// lazily evaluated `Sequence`.
 ///
-///     _ = convolution([1, 2], [3, 4])
+///     print(Array(convolution([1, 2], [3, 4])))
 ///     // [(1, 3), (2, 4)]
 ///
-/// - Attention: If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the
-///              shortest `Sequence`.
+/// [1]: https://en.wikipedia.org/wiki/Convolution_(computer_science)
 ///
+/// - Attention:
+///     - If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest
+///       `Sequence`.
+///     - Returns a lazy `Sequence`.
 /// - Parameters:
 ///     - sequence1: The first `Sequence`.
 ///     - sequence2: The second `Sequence`.
-///
 /// - Returns: A convolution as a lazily evaluated `Sequence` of 2-tuples.
-///
-/// [1]: https://en.wikipedia.org/wiki/Convolution_(computer_science)
 public func convolution <T1: Sequence, T2: Sequence> (_ sequence1: T1, _ sequence2: T2) -> LazyConvolution2Sequence<T1,
     T2> {
   return LazyConvolution2Sequence(sequence1, sequence2)

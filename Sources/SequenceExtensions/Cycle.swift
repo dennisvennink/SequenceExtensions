@@ -1,4 +1,4 @@
-public struct LazyCycleIterator <T: Sequence>: IteratorProtocol {
+public struct LazyCycleIterator <T: LazySequenceProtocol>: IteratorProtocol {
   public typealias Element = T.Element
 
   private var sequence: T
@@ -25,7 +25,7 @@ public struct LazyCycleIterator <T: Sequence>: IteratorProtocol {
   }
 }
 
-public struct LazyCycleSequence <T: Sequence>: LazySequenceProtocol {
+public struct LazyCycleSequence <T: LazySequenceProtocol>: LazySequenceProtocol {
   public typealias Iterator = LazyCycleIterator<T>
 
   private let iterator: Iterator
@@ -39,10 +39,10 @@ public struct LazyCycleSequence <T: Sequence>: LazySequenceProtocol {
   }
 }
 
-public extension Sequence {
+public extension LazySequenceProtocol {
   /// Creates a lazily evaluated `Sequence` that infinitely repeats the elements of `self`.
   ///
-  ///     _ = [1, 2, 3].cycle.take(10)
+  ///     print(Array([1, 2, 3].lazy.cycle.take(10)))
   ///     // [1, 2, 3, 1, 2, 3, 1, 2, 3, 1]
   var cycle: LazyCycleSequence<Self> {
     return LazyCycleSequence(self)

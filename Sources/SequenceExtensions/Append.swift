@@ -62,15 +62,15 @@ infix operator ++
 
 /// Creates a lazily evaluated `Sequence` that appends the right-hand `Sequence` to the left-hand `Sequence`.
 ///
-///     _ = [1, 2] ++ [3, 4]
+///     print(Array([1, 2] ++ [3, 4]))
 ///     // [1, 2, 3, 4]
 ///
-/// - Attention: If the left-hand `Sequence` is not finite, the result is the left-hand `Sequence`.
-///
+/// - Attention:
+///     - If the left-hand `Sequence` is not finite, the result is the left-hand `Sequence`.
+///     - Returns a lazy `Sequence`.
 /// - Parameters:
 ///     - lhs: The left-hand `Sequence`.
 ///     - rhs: The right-hand `Sequence`.
-///
 /// - Returns: A lazily evaluated `Sequence` containing the elements from the right-hand `Sequence` appended to the
 ///            left-hand `Sequence`.
 func ++ <T: Sequence> (_ lhs: T, _ rhs: T) -> LazyAppendSequence<T> {

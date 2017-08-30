@@ -54,19 +54,20 @@ public struct LazyProduct5Sequence <T1: Sequence, T2: Sequence, T3: Sequence, T4
 
 /// Creates a [Cartesian product][1] from five `Sequence`s using lazy evaluation.
 ///
-///     _ = product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10]).take(first: 4)
+///     print(Array(product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10]).take(first: 4)))
 ///     // [(1, 3, 5, 7, 9), (1, 3, 5, 7, 10), (1, 3, 5, 8, 9), (1, 3, 5, 8, 10)]
 ///
+/// [1]: https://en.wikipedia.org/wiki/Cartesian_product
+///
+/// - Attention:
+///     - Returns a lazy `Sequence`.
 /// - Parameters:
 ///     - sequence1: The first `Sequence`.
 ///     - sequence2: The second `Sequence`.
 ///     - sequence3: The third `Sequence`.
 ///     - sequence4: The fourth `Sequence`.
 ///     - sequence5: The fifth `Sequence`.
-///
 /// - Returns: A product as a lazily evaluated `Sequence` of 5-tuples.
-///
-/// [1]: https://en.wikipedia.org/wiki/Cartesian_product
 public func product <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence> (_ sequence1: T1,
     _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5) -> LazyProduct5Sequence<T1, T2, T3, T4, T5> {
   return LazyProduct5Sequence(sequence1, sequence2, sequence3, sequence4, sequence5)

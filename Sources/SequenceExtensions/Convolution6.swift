@@ -71,12 +71,15 @@ public struct LazyConvolution6Sequence <T1: Sequence, T2: Sequence, T3: Sequence
 
 /// Creates a [convolution][1] from six `Sequence`s using lazy evaluation.
 ///
-///     _ = convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12])
+///     print(Array(convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12])))
 ///     // [(1, 3, 5, 7, 9, 11), (2, 4, 6, 8, 10, 12)]
 ///
-/// - Attention: If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the
-///              shortest `Sequence`.
+/// [1]: https://en.wikipedia.org/wiki/Convolution_(computer_science)
 ///
+/// - Attention:
+///     - If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest
+///       `Sequence`.
+///     - Returns a lazy `Sequence`.
 /// - Parameters:
 ///     - sequence1: The first `Sequence`.
 ///     - sequence2: The second `Sequence`.
@@ -84,10 +87,7 @@ public struct LazyConvolution6Sequence <T1: Sequence, T2: Sequence, T3: Sequence
 ///     - sequence4: The fourth `Sequence`.
 ///     - sequence5: The fifth `Sequence`.
 ///     - sequence6: The sixth `Sequence`.
-///
 /// - Returns: A convolution as a lazily evaluated `Sequence` of 6-tuples.
-///
-/// [1]: https://en.wikipedia.org/wiki/Convolution_(computer_science)
 public func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence, T6: Sequence>
     (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5, _ sequence6: T6) ->
     LazyConvolution6Sequence<T1, T2, T3, T4, T5, T6> {
