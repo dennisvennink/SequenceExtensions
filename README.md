@@ -28,7 +28,7 @@ _SequenceExtensions_ is a library that adds various extensions to the [`LazySequ
 To install this package, add it to your project's `Package.swift` as a dependency:
 
 ```swift
-.package(url: "https://github.com/dennisvennink/SequenceExtensions", from: "0.1.0")
+.package(url: "https://github.com/dennisvennink/SequenceExtensions", from: "1.0.0")
 ```
 
 Don't forget to specify the tools version at the top:
