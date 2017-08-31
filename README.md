@@ -2,7 +2,7 @@
 
 ![][language-badge] [![][license-badge]][license]
 
-_SequenceExtensions_ is a library that adds various extensions to the [`LazySequenceProtocol`][lazysequenceprotocol] and [`Sequence`][sequence] protocols. It only adds extensions for operations which have no implementation in the standard library, should integrate well without adding any ambiguities and is well-documented and tested.
+_SequenceExtensions_ is a library that adds various extensions to the [`LazySequenceProtocol`][lazysequenceprotocol] and [`Sequence`][sequence] protocols. It should integrate well without adding any ambiguities and is well-documented and tested.
 
 ## Table of Contents
 
@@ -13,13 +13,23 @@ _SequenceExtensions_ is a library that adds various extensions to the [`LazySequ
     - [Operators](#operators)
         - [`++(_:_:)`](#__)
     - [Free Functions](#free-functions)
-        - [`convolution(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`](#convolution-__-___-____-_____-______-)
-        - [`product(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`](#product-__-___-____-_____-______-)
+        - [`convolution(_:_:)`](#convolution__)
+        - [`convolution(_:_:_:)`](#convolution___)
+        - [`convolution(_:_:_:_:)`](#convolution____)
+        - [`convolution(_:_:_:_:_:)`](#convolution_____)
+        - [`convolution(_:_:_:_:_:_:)`](#convolution______)
+        - [`product(_:_:)`](#product__)
+        - [`product(_:_:_:)`](#product___)
+        - [`product(_:_:_:_:)`](#product____)
+        - [`product(_:_:_:_:_:)`](#product_____)
+        - [`product(_:_:_:_:_:_:)`](#product______)
     - [Property Extensions on `LazySequenceProtocol`](#property-extensions-on-lazysequenceprotocol)
         - [`cycle`](#cycle)
     - [Method Extensions on `LazySequenceProtocol`](#method-extensions-on-lazysequenceprotocol)
-        - `drop(` [`first:`](#dropfirst) [`last:`](#droplast) `)`
-        - `take(` [`first:`](#takefirst) [`last:`](#takelast) `)`
+        - [`drop(first:)`](#dropfirst)
+        - [`drop(last:)`](#droplast)
+        - [`take(first:)`](#takefirst)
+        - [`take(last:)`](#takelast)
 
 ## Installation
 
@@ -90,59 +100,153 @@ A lazily evaluated `Sequence` containing the elements from the right-hand `Seque
 
 ### Free Functions
 
-#### `convolution(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`
+#### `convolution(_:_:)`
 
-Creates a [convolution][convolution] from two or more (up to six) `Sequence`s using lazy evaluation. `convolution(_:_:)` is similar to `zip(_:_:)`, but returns a lazily evaluated `Sequence`.
+Creates a [convolution][convolution] from two `Sequence`s using lazy evaluation. Is similar to `zip(_:_:)`, but returns a lazily evaluated `Sequence`.
 
 ##### Attention
 
 - If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
 - Returns a lazy `Sequence`.
 
-##### Examples
+##### Example
 
 ```swift
 print(Array(convolution([1, 2], [3, 4])))
 // [(1, 3), (2, 4)]
 ```
 
+##### Declaration
+
+```swift
+func convolution <T1: Sequence, T2: Sequence> (_ sequence1: T1, _ sequence2: T2) -> LazyConvolution2Sequence<T1, T2>
+```
+
+##### Parameters
+
+- `sequence1` The first `Sequence`.
+- `sequence2` The second `Sequence`.
+
+##### Returns
+
+A convolution as a lazily evaluated `Sequence` of 2-tuples.
+
+#### `convolution(_:_:_:)`
+
+Creates a [convolution][convolution] from three `Sequence`s using lazy evaluation.
+
+##### Attention
+
+- If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
+- Returns a lazy `Sequence`.
+
+##### Example
+
 ```swift
 print(Array(convolution([1, 2], [3, 4], [5, 6])))
 // [(1, 3, 5), (2, 4, 6)]
 ```
+
+##### Declaration
+
+```swift
+func convolution <T1: Sequence, T2: Sequence, T3: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3) -> LazyConvolution3Sequence<T1, T2, T3>
+```
+
+##### Parameters
+
+- `sequence1` The first `Sequence`.
+- `sequence2` The second `Sequence`.
+- `sequence3` The third `Sequence`.
+
+##### Returns
+
+A convolution as a lazily evaluated `Sequence` of 3-tuples.
+
+#### `convolution(_:_:_:_:)`
+
+Creates a [convolution][convolution] from four `Sequence`s using lazy evaluation.
+
+##### Attention
+
+- If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
+- Returns a lazy `Sequence`.
+
+##### Example
 
 ```swift
 print(Array(convolution([1, 2], [3, 4], [5, 6], [7, 8])))
 // [(1, 3, 5, 7), (2, 4, 6, 8)]
 ```
 
+##### Declaration
+
+```swift
+func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4) -> LazyConvolution4Sequence<T1, T2, T3, T4>
+```
+
+##### Parameters
+
+- `sequence1` The first `Sequence`.
+- `sequence2` The second `Sequence`.
+- `sequence3` The third `Sequence`.
+- `sequence4` The fourth `Sequence`.
+
+##### Returns
+
+A convolution as a lazily evaluated `Sequence` of 4-tuples.
+
+#### `convolution(_:_:_:_:_:)`
+
+Creates a [convolution][convolution] from five `Sequence`s using lazy evaluation.
+
+##### Attention
+
+- If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
+- Returns a lazy `Sequence`.
+
+##### Example
+
 ```swift
 print(Array(convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10])))
 // [(1, 3, 5, 7, 9), (2, 4, 6, 8, 10)]
 ```
+
+##### Declaration
+
+```swift
+func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5) -> LazyConvolution5Sequence<T1, T2, T3, T4, T5>
+```
+
+##### Parameters
+
+- `sequence1` The first `Sequence`.
+- `sequence2` The second `Sequence`.
+- `sequence3` The third `Sequence`.
+- `sequence4` The fourth `Sequence`.
+- `sequence5` The fifth `Sequence`.
+
+##### Returns
+
+A convolution as a lazily evaluated `Sequence` of 5-tuples.
+
+#### `convolution(_:_:_:_:_:_:)`
+
+Creates a [convolution][convolution] from six `Sequence`s using lazy evaluation.
+
+##### Attention
+
+- If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
+- Returns a lazy `Sequence`.
+
+##### Example
 
 ```swift
 print(Array(convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12])))
 // [(1, 3, 5, 7, 9, 11), (2, 4, 6, 8, 10, 12)]
 ```
 
-##### Declarations
-
-```swift
-func convolution <T1: Sequence, T2: Sequence> (_ sequence1: T1, _ sequence2: T2) -> LazyConvolution2Sequence<T1, T2>
-```
-
-```swift
-func convolution <T1: Sequence, T2: Sequence, T3: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3) -> LazyConvolution3Sequence<T1, T2, T3>
-```
-
-```swift
-func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4) -> LazyConvolution4Sequence<T1, T2, T3, T4>
-```
-
-```swift
-func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5) -> LazyConvolution5Sequence<T1, T2, T3, T4, T5>
-```
+##### Declaration
 
 ```swift
 func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence, T6: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5, _ sequence6: T6) -> LazyConvolution6Sequence<T1, T2, T3, T4, T5, T6>
@@ -152,67 +256,157 @@ func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Se
 
 - `sequence1` The first `Sequence`.
 - `sequence2` The second `Sequence`.
-- `sequence3` The third `Sequence` (≥ arity 3).
-- `sequence4` The fourth `Sequence` (≥ arity 4).
-- `sequence5` The fifth `Sequence` (≥ arity 5).
-- `sequence6` The sixth `Sequence` (= arity 6).
+- `sequence3` The third `Sequence`.
+- `sequence4` The fourth `Sequence`.
+- `sequence5` The fifth `Sequence`.
+- `sequence6` The sixth `Sequence`.
 
 ##### Returns
 
-A convolution as a lazily evaluated `Sequence` of n-tuples.
+A convolution as a lazily evaluated `Sequence` of 6-tuples.
 
-#### `product(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`
+#### `product(_:_:)`
 
-Creates a [Cartesian product][cartesian-product] from two or more (up to six) `Sequence`s using lazy evaluation.
+Creates a [Cartesian product][cartesian-product] from two `Sequence`s using lazy evaluation.
 
 ##### Attention
 
 Returns a lazy `Sequence`.
 
-##### Examples
+##### Example
 
 ```swift
 print(Array(product([1, 2], [3, 4])))
 // [(1, 3), (1, 4), (2, 3), (2, 4)]
 ```
 
+##### Declaration
+
+```swift
+func product <T1: Sequence, T2: Sequence> (_ sequence1: T1, _ sequence2: T2) -> LazyProduct2Sequence<T1, T2>
+```
+
+##### Parameters
+
+- `sequence1` The first `Sequence`.
+- `sequence2` The second `Sequence`.
+
+##### Returns
+
+A product as a lazily evaluated `Sequence` of 2-tuples.
+
+#### `product(_:_:_:)`
+
+Creates a [Cartesian product][cartesian-product] from three `Sequence`s using lazy evaluation.
+
+##### Attention
+
+Returns a lazy `Sequence`.
+
+##### Example
+
 ```swift
 print(Array(product([1, 2], [3, 4], [5, 6]).take(4)))
 // [(1, 3, 5), (1, 3, 6), (1, 4, 5), (1, 4, 6)]
 ```
+
+##### Declaration
+
+```swift
+func product <T1: Sequence, T2: Sequence, T3: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3) -> LazyProduct3Sequence<T1, T2, T3>
+```
+
+##### Parameters
+
+- `sequence1` The first `Sequence`.
+- `sequence2` The second `Sequence`.
+- `sequence3` The third `Sequence`.
+
+##### Returns
+
+A product as a lazily evaluated `Sequence` of 3-tuples.
+
+#### `product(_:_:_:_:)`
+
+Creates a [Cartesian product][cartesian-product] from four `Sequence`s using lazy evaluation.
+
+##### Attention
+
+Returns a lazy `Sequence`.
+
+##### Example
 
 ```swift
 print(Array(product([1, 2], [3, 4], [5, 6], [7, 8]).take(4)))
 // [(1, 3, 5, 7), (1, 3, 5, 8), (1, 3, 6, 7), (1, 3, 6, 8)]
 ```
 
+##### Declaration
+
+```swift
+func product <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4) -> LazyProduct4Sequence<T1, T2, T3, T4>
+```
+
+##### Parameters
+
+- `sequence1` The first `Sequence`.
+- `sequence2` The second `Sequence`.
+- `sequence3` The third `Sequence`.
+- `sequence4` The fourth `Sequence`.
+
+##### Returns
+
+A product as a lazily evaluated `Sequence` of 4-tuples.
+
+#### `product(_:_:_:_:_:)`
+
+Creates a [Cartesian product][cartesian-product] from five `Sequence`s using lazy evaluation.
+
+##### Attention
+
+Returns a lazy `Sequence`.
+
+##### Example
+
 ```swift
 print(Array(product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10]).take(4)))
 // [(1, 3, 5, 7, 9), (1, 3, 5, 7, 10), (1, 3, 5, 8, 9), (1, 3, 5, 8, 10)]
 ```
+
+##### Declaration
+
+```swift
+func product <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5) -> LazyProduct5Sequence<T1, T2, T3, T4, T5>
+```
+
+##### Parameters
+
+- `sequence1` The first `Sequence`.
+- `sequence2` The second `Sequence`.
+- `sequence3` The third `Sequence`.
+- `sequence4` The fourth `Sequence`.
+- `sequence5` The fifth `Sequence`.
+
+##### Returns
+
+A product as a lazily evaluated `Sequence` of 5-tuples.
+
+#### `product(_:_:_:_:_:_:)`
+
+Creates a [Cartesian product][cartesian-product] from six `Sequence`s using lazy evaluation.
+
+##### Attention
+
+Returns a lazy `Sequence`.
+
+##### Example
 
 ```swift
 print(Array(product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]).take(4)))
 // [(1, 3, 5, 7, 9, 11), (1, 3, 5, 7, 9, 12), (1, 3, 5, 7, 10, 11), (1, 3, 5, 7, 10, 12)]
 ```
 
-##### Declarations
-
-```swift
-func product <T1: Sequence, T2: Sequence> (_ sequence1: T1, _ sequence2: T2) -> LazyProduct2Sequence<T1, T2>
-```
-
-```swift
-func product <T1: Sequence, T2: Sequence, T3: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3) -> LazyProduct3Sequence<T1, T2, T3>
-```
-
-```swift
-func product <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4) -> LazyProduct4Sequence<T1, T2, T3, T4>
-```
-
-```swift
-func product <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5) -> LazyProduct5Sequence<T1, T2, T3, T4, T5>
-```
+##### Declaration
 
 ```swift
 func product <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence, T6: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5, _ sequence6: T6) -> LazyProduct6Sequence<T1, T2, T3, T4, T5, T6>
@@ -222,14 +416,14 @@ func product <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequen
 
 - `sequence1` The first `Sequence`.
 - `sequence2` The second `Sequence`.
-- `sequence3` The third `Sequence` (≥ arity 3).
-- `sequence4` The fourth `Sequence` (≥ arity 4).
-- `sequence5` The fifth `Sequence` (≥ arity 5).
-- `sequence6` The sixth `Sequence` (= arity 6).
+- `sequence3` The third `Sequence`.
+- `sequence4` The fourth `Sequence`.
+- `sequence5` The fifth `Sequence`.
+- `sequence6` The sixth `Sequence`.
 
 ##### Returns
 
-A product as a lazily evaluated `Sequence` of n-tuples.
+A product as a lazily evaluated `Sequence` of 6-tuples.
 
 ### Property Extensions on `LazySequenceProtocol`
 
