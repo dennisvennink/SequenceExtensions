@@ -30,6 +30,7 @@ _SequenceExtensions_ is a library that adds various extensions to the [`LazySequ
         - [`drop(last:)`](#droplast)
         - [`take(first:)`](#takefirst)
         - [`take(last:)`](#takelast)
+        - [`take(while:)`](#takewhile)
 
 ## Installation
 
@@ -577,6 +578,31 @@ func take (last numberOfElements: Int) -> LazyTakeLastSequence<Self>
 ##### Returns
 
 A lazily evaluated `Sequence` that takes the number of elements from the end of `self`.
+
+#### `take(while:)`
+
+Creates a lazily evaluated `Sequence` containing the initial, consecutive elements that satisfy the given predicate.
+
+##### Example
+
+```swift
+print(Array([1, 2, 3, 4, 5].lazy.take(while: {$0 <= 3})))
+// [1, 2, 3]
+```
+
+##### Declaration
+
+```swift
+func take (while predicate: @escaping (Element) -> Bool) -> LazyTakeWhileSequence<Self>
+```
+
+##### Parameters
+
+- `predicate` A closure that takes an element of the sequence as its argument and returns a Boolean value indicating whether the element should be included in the result.
+
+##### Returns
+
+A lazily evaluated `Sequence` that contains the consecutive elements that satisfy the predicate.
 
 <!-- Images -->
 [language-badge]: https://img.shields.io/badge/Language-Swift%204-F04C3E.svg
