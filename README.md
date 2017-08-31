@@ -254,7 +254,7 @@ var cycle: LazyCycleSequence<Self>
 
 #### `drop(first:)`
 
-Creates a lazily evaluated `Sequence` containing all but the first number of elements of `self`. Unlike `removeFirst(_ n)`, `drop(first:)` is non-mutating.
+Creates a lazily evaluated `Sequence` containing all but the first number of elements of `self`. Unlike `removeFirst(_ n:)`, `drop(first:)` is non-mutating.
 
 ##### Attention
 
@@ -289,7 +289,7 @@ A lazily evaluated `Sequence` containing all but the first number of elements of
 
 #### `drop(last:)`
 
-Creates a lazily evaluated `Sequence` containing all but the last number of elements of `self`. Unlike `removeLast(_ n)`, `drop(first:)` is non-mutating.
+Creates a lazily evaluated `Sequence` containing all but the last number of elements of `self`. Unlike `removeLast(_ n:)`, `drop(first:)` is non-mutating.
 
 ##### Attention
 
