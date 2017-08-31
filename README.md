@@ -355,7 +355,7 @@ A lazily evaluated `Sequence` that takes the number of elements from the start o
 
 #### `take(last:)`
 
-Creates a lazily evaluated `Sequence` containing the last number of elements of `self`. Unlike `suffix(_ maxLength:)`, `take(first:)` will guarantee to return a lazy `Sequence` when operating on a lazy `Sequence`.
+Creates a lazily evaluated `Sequence` containing the last number of elements of `self`. Unlike `suffix(_ maxLength:)`, `take(last:)` will guarantee to return a lazy `Sequence` when operating on a lazy `Sequence`.
 
 ##### Example
 
