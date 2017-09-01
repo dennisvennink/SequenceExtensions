@@ -51,7 +51,7 @@ public struct LazyTakeWhileSequence <T: LazySequenceProtocol>: LazySequenceProto
 
 public extension LazySequenceProtocol {
   /// Creates a lazily evaluated `Sequence` containing the initial, consecutive elements that satisfy the given
-  /// predicate.
+  /// predicate. Identical to `prefix(while:)`.
   ///
   ///     print(Array([1, 2, 3, 4, 5].lazy.take(while: {$0 <= 3})))
   ///     // [1, 2, 3]
