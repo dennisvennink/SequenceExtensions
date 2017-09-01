@@ -28,6 +28,7 @@ _SequenceExtensions_ is a library that adds various extensions to the [`LazySequ
     - [Method Extensions on `LazySequenceProtocol`](#method-extensions-on-lazysequenceprotocol)
         - [`drop(first:)`](#dropfirst)
         - [`drop(last:)`](#droplast)
+        - [`intersperse(_:)`](#intersperse_)
         - [`span(_:)`](#span_)
         - [`take(first:)`](#takefirst)
         - [`take(last:)`](#takelast)
@@ -517,6 +518,31 @@ func drop (last numberOfElements: Int) -> LazyDropLastSequence<Self>
 ##### Returns
 
 A lazily evaluated `Sequence` containing all but the last number of elements of `self`.
+
+#### `intersperse(_:)`
+
+Creates a lazily evaluated `Sequence` in which `element` is interspersed between the elements of `self`.
+
+##### Example
+
+```swift
+print(Array([1, 1, 1].lazy.intersperse(2)))
+// [1, 2, 1, 2, 1]
+```
+
+##### Declaration
+
+```swift
+func intersperse (_ element: Element) -> LazyIntersperseSequence<Self>
+```
+
+##### Parameters
+
+- `element` The element to intersperse.
+
+##### Returns
+
+A lazily evaluated `Sequence` in which `element` is interspersed between the elements of `self`.
 
 #### `span(_:)`
 
