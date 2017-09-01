@@ -3,7 +3,7 @@ public struct LazyDropFirstIterator <T: IteratorProtocol>: IteratorProtocol {
 
   private var iterator: T
   private var numberOfElements: Int
-  private var didInitialiseIterator = false
+  private var didInitialise = false
   private var reachedEnd = false
 
   internal init (_ iterator: T, _ numberOfElements: Int) {
@@ -22,14 +22,14 @@ public struct LazyDropFirstIterator <T: IteratorProtocol>: IteratorProtocol {
       return nil
     }
 
-    if !self.didInitialiseIterator {
+    if !self.didInitialise {
       while self.numberOfElements > 0 {
         _ = self.iterator.next()
 
         self.numberOfElements -= 1
       }
 
-      self.didInitialiseIterator = true
+      self.didInitialise = true
     }
 
     let next = self.iterator.next()
