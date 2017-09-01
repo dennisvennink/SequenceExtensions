@@ -28,6 +28,7 @@ _SequenceExtensions_ is a library that adds various extensions to the [`LazySequ
     - [Method Extensions on `LazySequenceProtocol`](#method-extensions-on-lazysequenceprotocol)
         - [`drop(first:)`](#dropfirst)
         - [`drop(last:)`](#droplast)
+        - [`span(_:)`](#span_)
         - [`take(first:)`](#takefirst)
         - [`take(last:)`](#takelast)
         - [`take(while:)`](#takewhile)
@@ -517,6 +518,36 @@ func drop (last numberOfElements: Int) -> LazyDropLastSequence<Self>
 
 A lazily evaluated `Sequence` containing all but the last number of elements of `self`.
 
+#### `span(_:)`
+
+Creates a tuple of which the first element is a lazily evaluated `Sequence` that contains the initial, consecutive elements that satisfy the given predicate and the second element is a lazily evaluated `Sequence` that contains the remainder of the list.
+
+##### Example
+
+```swift
+let (satisfiedElements, remainderElements) = [1, 2, 3, 4, 1, 2, 3, 4].lazy.span{$0 < 3}
+
+print(Array(satisfiedElements))
+// [1, 2]
+
+print(Array(remainderElements))
+// [3, 4, 1, 2, 3, 4]
+```
+
+##### Declaration
+
+```swift
+func span (_ predicate: @escaping (Element) -> Bool) -> (LazyTakeWhileSequence<Self>, LazyDropWhileSequence<Elements>)
+```
+
+##### Parameters
+
+- `predicate` A closure that takes an element of the sequence as its argument and returns a Boolean value indicating whether the element should be included in the first element of the result.
+
+##### Returns
+
+A tuple of which the first element is a lazily evaluated `Sequence` that contains the initial, consecutive elements that satisfy the given predicate and the second element is a lazily evaluated `Sequence` that contains the remainder of the list.
+
 #### `take(first:)`
 
 Creates a lazily evaluated `Sequence` containing the first number of elements of `self`. Unlike `prefix(_ maxLength:)`, `take(first:)` will guarantee to return a lazy `Sequence` when operating on a lazy `Sequence`.
@@ -581,7 +612,7 @@ A lazily evaluated `Sequence` that takes the number of elements from the end of 
 
 #### `take(while:)`
 
-Creates a lazily evaluated `Sequence` containing the initial, consecutive elements that satisfy the given predicate.
+Creates a lazily evaluated `Sequence` containing the initial, consecutive elements that satisfy the given predicate. Identical to `prefix(while:)`.
 
 ##### Example
 
