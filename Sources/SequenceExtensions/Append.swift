@@ -74,6 +74,6 @@ infix operator ++
 ///     - rhs: The right-hand `Sequence`.
 /// - Returns: A lazily evaluated `Sequence` containing the elements from the right-hand `Sequence` appended to the
 ///            left-hand `Sequence`.
-func ++ <T: Sequence> (_ lhs: T, _ rhs: T) -> LazyAppendSequence<T> {
+public func ++ <T: Sequence> (lhs: T, rhs: T) -> LazyAppendSequence<T> {
   return LazyAppendSequence(lhs, rhs)
 }
