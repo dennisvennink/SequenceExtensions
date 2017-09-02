@@ -25,6 +25,7 @@ _SequenceExtensions_ is a library that adds various extensions to the [`LazySequ
         - [`product(_:_:_:_:_:_:)`](#product______)
     - [Property Extensions on `LazySequenceProtocol`](#property-extensions-on-lazysequenceprotocol)
         - [`cycle`](#cycle)
+        - [`reverse`](#reverse)
     - [Method Extensions on `LazySequenceProtocol`](#method-extensions-on-lazysequenceprotocol)
         - [`drop(first:)`](#dropfirst)
         - [`drop(last:)`](#droplast)
@@ -445,6 +446,31 @@ print(Array([1, 2, 3].lazy.cycle.take(10)))
 
 ```swift
 var cycle: LazyCycleSequence<Self>
+```
+
+#### `reverse`
+
+Creates a lazily evaluated `Sequence` in which the elements of `self` are in reverse order.
+
+##### Attention
+
+`Self` must be finite.
+
+##### Complexity
+
+The first operation is O(n + 1). Consecutive operations are O(1).
+
+##### Example
+
+```swift
+print(Array([1, 2, 3].lazy.reverse))
+// [3, 2, 1]
+```
+
+##### Declaration
+
+```swift
+var reverse: LazyReverseSequence<Self>
 ```
 
 ### Method Extensions on `LazySequenceProtocol`
