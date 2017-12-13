@@ -1,54 +1,46 @@
 # SequenceExtensions
 
-![][language-badge] [![][license-badge]][license]
+![Requires Swift > 4](https://img.shields.io/badge/Language-Swift%204-F04C3E.svg) ![Licensed under the MIT license](https://img.shields.io/badge/License-MIT-lightgrey.svg)
 
-_SequenceExtensions_ is a library that adds various extensions to the [`LazySequenceProtocol`][lazysequenceprotocol] and [`Sequence`][sequence] protocols. It should integrate well without adding any ambiguities and is well-documented and tested.
+_SequenceExtensions_ is a library that adds various missing operations related to `Sequence`s.
 
-## Table of Contents
+## Table Of Contents
 
 - [Installation](#installation)
     - [Swift Package Manager](#swift-package-manager)
+- [Contributing](#contributing)
 - [Testing](#testing)
 - [API](#api)
-    - [Operators](#operators)
-        - [`++(_:_:)`](#__)
+    - [Operator Overloads](#operator-overloads)
+        - [`!=(_:_:)`](#__)
+        - [`==(_:_:)`](#__)
     - [Free Functions](#free-functions)
-        - [`convolution(_:_:)`](#convolution__)
-        - [`convolution(_:_:_:)`](#convolution___)
-        - [`convolution(_:_:_:_:)`](#convolution____)
-        - [`convolution(_:_:_:_:_:)`](#convolution_____)
-        - [`convolution(_:_:_:_:_:_:)`](#convolution______)
-        - [`product(_:_:)`](#product__)
-        - [`product(_:_:_:)`](#product___)
-        - [`product(_:_:_:_:)`](#product____)
-        - [`product(_:_:_:_:_:)`](#product_____)
-        - [`product(_:_:_:_:_:_:)`](#product______)
-    - [Property Extensions on `LazySequenceProtocol`](#property-extensions-on-lazysequenceprotocol)
-        - [`cycle`](#cycle)
-        - [`reverse`](#reverse)
-    - [Method Extensions on `LazySequenceProtocol`](#method-extensions-on-lazysequenceprotocol)
-        - [`drop(first:)`](#dropfirst)
-        - [`drop(last:)`](#droplast)
-        - [`intersperse(_:)`](#intersperse_)
-        - [`span(_:)`](#span_)
-        - [`take(first:)`](#takefirst)
-        - [`take(last:)`](#takelast)
-        - [`take(while:)`](#takewhile)
+        - [`product(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`](#product-__-___-____-_____-______-)
+        - [`zip(` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`](#zip-___-____-_____-______-)
 
 ## Installation
 
 ### Swift Package Manager
 
-To install this package, add it to your project's `Package.swift` as a dependency:
-
-```swift
-.package(url: "https://github.com/dennisvennink/SequenceExtensions", from: "1.0.0")
-```
-
-Don't forget to specify the tools version at the top:
+To install this package, add it as a dependency to your project's manifest file (`Package.swift`), e.g., a package named `"Example"` whose main product is a library with no dependencies other than SequenceExtensions would be defined as such:
 
 ```swift
 // swift-tools-version:4.0
+import PackageDescription
+
+let package = Package(
+  name: "Example",
+  products: [
+    .library(name: "Example", targets: ["Example"])
+  ],
+  dependencies: [
+    .package(url: "https://github.com/dennisvennink/SequenceExtensions", from: "2.0.0")
+  ],
+  targets: [
+    .target(name: "Example", dependencies: ["SequenceExtensions"]),
+    .testTarget(name: "ExampleTests", dependencies: ["Example"])
+  ]
+)
 ```
 
 Then, `import` it into your project:
@@ -57,643 +49,289 @@ Then, `import` it into your project:
 import SequenceExtensions
 ```
 
+## Contributing
+
+To contribute, think of a missing feature or issue to work on, then fork the project and create your feature branch:
+
+```shell
+git checkout -b my-new-feature
+```
+
+When you're done implementing your feature, commit your changes:
+
+```shell
+git commit -am "Add some new feature"
+```
+
+Then push to the feature branch:
+
+```shell
+git push origin my-new-feature
+```
+
+Finally, submit a pull request!
+
 ## Testing
 
-To perform the tests, run:
+All tests are written in [_XCTest_](https://developer.apple.com/documentation/xctest). To perform them, run:
 
-```
-swift test -Xswiftc -D -Xswiftc DEBUG
+```shell
+swift test
 ```
 
 ## API
 
-### Operators
+### Operator Overloads
 
-#### `++(_:_:)`
+#### `==(_:_:)`
 
-Creates a lazily evaluated `Sequence` that appends the right-hand `Sequence` to the left-hand `Sequence`. Unlike `+(_:_:)`, `++(_:_:)` will guarantee to return a lazy `Sequence` when operating on a lazy `Sequence`.
+Compares whether the left-hand `Sequence` of n-tuples is equal to the right-hand `Sequence` of n-tuples.
 
-##### Attention
-
-- If the left-hand `Sequence` is not finite, the result is the left-hand `Sequence`.
-- Returns a lazy `Sequence`.
-
-##### Example
+##### Declarations
 
 ```swift
-print(Array([1, 2] ++ [3, 4]))
-// [1, 2, 3, 4]
+public func == <Sequence1: Sequence, Sequence2: Sequence, Equatable1: Equatable, Equatable2: Equatable> (lhs: Sequence1, rhs: Sequence2) -> Bool where Sequence1.Element == (Equatable1, Equatable2), Sequence2.Element == (Equatable1, Equatable2)
 ```
 
-##### Declaration
+```swift
+public func == <Sequence1: Sequence, Sequence2: Sequence, Equatable1: Equatable, Equatable2: Equatable, Equatable3: Equatable> (lhs: Sequence1, rhs: Sequence2) -> Bool where Sequence1.Element == (Equatable1, Equatable2, Equatable3), Sequence2.Element == (Equatable1, Equatable2, Equatable3)
+```
 
 ```swift
-infix operator ++
+public func == <Sequence1: Sequence, Sequence2: Sequence, Equatable1: Equatable, Equatable2: Equatable, Equatable3: Equatable, Equatable4: Equatable> (lhs: Sequence1, rhs: Sequence2) -> Bool where Sequence1.Element == (Equatable1, Equatable2, Equatable3, Equatable4), Sequence2.Element == (Equatable1, Equatable2, Equatable3, Equatable4)
+```
 
-func ++ <T: Sequence> (_ lhs: T, _ rhs: T) -> LazyAppendSequence<T>
+```swift
+public func == <Sequence1: Sequence, Sequence2: Sequence, Equatable1: Equatable, Equatable2: Equatable, Equatable3: Equatable, Equatable4: Equatable, Equatable5: Equatable> (lhs: Sequence1, rhs: Sequence2) -> Bool where Sequence1.Element == (Equatable1, Equatable2, Equatable3, Equatable4, Equatable5), Sequence2.Element == (Equatable1, Equatable2, Equatable3, Equatable4, Equatable5)
+```
+
+```swift
+public func == <Sequence1: Sequence, Sequence2: Sequence, Equatable1: Equatable, Equatable2: Equatable, Equatable3: Equatable, Equatable4: Equatable, Equatable5: Equatable, Equatable6: Equatable> (lhs: Sequence1, rhs: Sequence2) -> Bool where Sequence1.Element == (Equatable1, Equatable2, Equatable3, Equatable4, Equatable5, Equatable6), Sequence2.Element == (Equatable1, Equatable2, Equatable3, Equatable4, Equatable5, Equatable6)
+```
+
+##### Examples
+
+```swift
+print([(0, 1)] == [(0, 1)])
+// true
+```
+
+```swift
+print([(0, 1, 2)] == [(0, 1, 2)])
+// true
+```
+
+```swift
+print([(0, 1, 2, 3)] == [(0, 1, 2, 3)])
+// true
+```
+
+```swift
+print([(0, 1, 2, 3, 4)] == [(0, 1, 2, 3, 4)])
+// true
+```
+
+```swift
+print([(0, 1, 2, 3, 4, 5)] == [(0, 1, 2, 3, 4, 5)])
+// true
 ```
 
 ##### Parameters
 
-- `lhs` The left-hand `Sequence`.
-- `rhs` The right-hand `Sequence`.
+- `lhs`: The left-hand `Sequence` of n-tuples.
+- `rhs`: The right-hand `Sequence` of n-tuples.
 
 ##### Returns
 
-A lazily evaluated `Sequence` containing the elements from the right-hand `Sequence` appended to the left-hand `Sequence`.
+A `Bool`ean value indicating whether the left-hand `Sequence` of n-tuples is equal to the right-hand `Sequence` of n-tuples.
+
+#### `!=(_:_:)`
+
+Compares whether the left-hand `Sequence` of n-tuples is not equal to the right-hand `Sequence` of n-tuples.
+
+##### Declarations
+
+```swift
+public func != <Sequence1: Sequence, Sequence2: Sequence, Equatable1: Equatable, Equatable2: Equatable> (lhs: Sequence1, rhs: Sequence2) -> Bool where Sequence1.Element == (Equatable1, Equatable2), Sequence2.Element == (Equatable1, Equatable2)
+```
+
+```swift
+public func != <Sequence1: Sequence, Sequence2: Sequence, Equatable1: Equatable, Equatable2: Equatable, Equatable3: Equatable> (lhs: Sequence1, rhs: Sequence2) -> Bool where Sequence1.Element == (Equatable1, Equatable2, Equatable3), Sequence2.Element == (Equatable1, Equatable2, Equatable3)
+```
+
+```swift
+public func != <Sequence1: Sequence, Sequence2: Sequence, Equatable1: Equatable, Equatable2: Equatable, Equatable3: Equatable, Equatable4: Equatable> (lhs: Sequence1, rhs: Sequence2) -> Bool where Sequence1.Element == (Equatable1, Equatable2, Equatable3, Equatable4), Sequence2.Element == (Equatable1, Equatable2, Equatable3, Equatable4)
+```
+
+```swift
+public func != <Sequence1: Sequence, Sequence2: Sequence, Equatable1: Equatable, Equatable2: Equatable, Equatable3: Equatable, Equatable4: Equatable, Equatable5: Equatable> (lhs: Sequence1, rhs: Sequence2) -> Bool where Sequence1.Element == (Equatable1, Equatable2, Equatable3, Equatable4, Equatable5), Sequence2.Element == (Equatable1, Equatable2, Equatable3, Equatable4, Equatable5)
+```
+
+```swift
+public func != <Sequence1: Sequence, Sequence2: Sequence, Equatable1: Equatable, Equatable2: Equatable, Equatable3: Equatable, Equatable4: Equatable, Equatable5: Equatable, Equatable6: Equatable> (lhs: Sequence1, rhs: Sequence2) -> Bool where Sequence1.Element == (Equatable1, Equatable2, Equatable3, Equatable4, Equatable5, Equatable6), Sequence2.Element == (Equatable1, Equatable2, Equatable3, Equatable4, Equatable5, Equatable6)
+```
+
+##### Examples
+
+```swift
+print([(0, 1)] != [(0, 2)])
+// true
+```
+
+```swift
+print([(0, 1, 2)] != [(0, 1, 3)])
+// true
+```
+
+```swift
+print([(0, 1, 2, 3)] != [(0, 1, 2, 4)])
+// true
+```
+
+```swift
+print([(0, 1, 2, 3, 4)] != [(0, 1, 2, 3, 5)])
+// true
+```
+
+```swift
+print([(0, 1, 2, 3, 4, 5)] != [(0, 1, 2, 3, 4, 6)])
+// true
+```
+
+##### Parameters
+
+- `lhs`: The left-hand `Sequence` of n-tuples.
+- `rhs`: The right-hand `Sequence` of n-tuples.
+
+##### Returns
+
+A `Bool`ean value indicating whether the left-hand `Sequence` of n-tuples is not equal to the right-hand `Sequence` of n-tuples.
 
 ### Free Functions
 
-#### `convolution(_:_:)`
+#### `product(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`
 
-Creates a [convolution][convolution] from two `Sequence`s using lazy evaluation. Is similar to `zip(_:_:)`, but returns a lazily evaluated `Sequence`.
+Creates the Cartesian product of two `Sequence`s as a `Sequence` of n-tuples.
 
-##### Attention
-
-- If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
-- Returns a lazy `Sequence`.
-
-##### Example
+##### Declarations
 
 ```swift
-print(Array(convolution([1, 2], [3, 4])))
-// [(1, 3), (2, 4)]
+public func product <Sequence1: Sequence, Sequence2: Sequence> (_ sequence1: Sequence1, _ sequence2: Sequence2) -> AnySequence<(Sequence1.Element, Sequence2.Element)>
 ```
-
-##### Declaration
 
 ```swift
-func convolution <T1: Sequence, T2: Sequence> (_ sequence1: T1, _ sequence2: T2) -> LazyConvolution2Sequence<T1, T2>
+public func product <Sequence1: Sequence, Sequence2: Sequence, Sequence3: Sequence> (_ sequence1: Sequence1, _ sequence2: Sequence2, _ sequence3: Sequence3) -> AnySequence<(Sequence1.Element, Sequence2.Element, Sequence3.Element)>
 ```
-
-##### Parameters
-
-- `sequence1` The first `Sequence`.
-- `sequence2` The second `Sequence`.
-
-##### Returns
-
-A convolution as a lazily evaluated `Sequence` of 2-tuples.
-
-#### `convolution(_:_:_:)`
-
-Creates a [convolution][convolution] from three `Sequence`s using lazy evaluation.
-
-##### Attention
-
-- If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
-- Returns a lazy `Sequence`.
-
-##### Example
 
 ```swift
-print(Array(convolution([1, 2], [3, 4], [5, 6])))
-// [(1, 3, 5), (2, 4, 6)]
+public func product <Sequence1: Sequence, Sequence2: Sequence, Sequence3: Sequence, Sequence4: Sequence> (_ sequence1: Sequence1, _ sequence2: Sequence2, _ sequence3: Sequence3, _ sequence4: Sequence4) -> AnySequence<(Sequence1.Element, Sequence2.Element, Sequence3.Element, Sequence4.Element)>
 ```
-
-##### Declaration
 
 ```swift
-func convolution <T1: Sequence, T2: Sequence, T3: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3) -> LazyConvolution3Sequence<T1, T2, T3>
+public func product <Sequence1: Sequence, Sequence2: Sequence, Sequence3: Sequence, Sequence4: Sequence, Sequence5: Sequence> (_ sequence1: Sequence1, _ sequence2: Sequence2, _ sequence3: Sequence3, _ sequence4: Sequence4, _ sequence5: Sequence5) -> AnySequence<(Sequence1.Element, Sequence2.Element, Sequence3.Element, Sequence4.Element, Sequence5.Element)>
 ```
-
-##### Parameters
-
-- `sequence1` The first `Sequence`.
-- `sequence2` The second `Sequence`.
-- `sequence3` The third `Sequence`.
-
-##### Returns
-
-A convolution as a lazily evaluated `Sequence` of 3-tuples.
-
-#### `convolution(_:_:_:_:)`
-
-Creates a [convolution][convolution] from four `Sequence`s using lazy evaluation.
-
-##### Attention
-
-- If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
-- Returns a lazy `Sequence`.
-
-##### Example
 
 ```swift
-print(Array(convolution([1, 2], [3, 4], [5, 6], [7, 8])))
-// [(1, 3, 5, 7), (2, 4, 6, 8)]
+public func product <Sequence1: Sequence, Sequence2: Sequence, Sequence3: Sequence, Sequence4: Sequence, Sequence5: Sequence, Sequence6: Sequence> (_ sequence1: Sequence1, _ sequence2: Sequence2, _ sequence3: Sequence3, _ sequence4: Sequence4, _ sequence5: Sequence5, _ sequence6: Sequence6) -> AnySequence<(Sequence1.Element, Sequence2.Element, Sequence3.Element, Sequence4.Element, Sequence5.Element, Sequence6.Element)>
 ```
 
-##### Declaration
-
-```swift
-func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4) -> LazyConvolution4Sequence<T1, T2, T3, T4>
-```
-
-##### Parameters
-
-- `sequence1` The first `Sequence`.
-- `sequence2` The second `Sequence`.
-- `sequence3` The third `Sequence`.
-- `sequence4` The fourth `Sequence`.
-
-##### Returns
-
-A convolution as a lazily evaluated `Sequence` of 4-tuples.
-
-#### `convolution(_:_:_:_:_:)`
-
-Creates a [convolution][convolution] from five `Sequence`s using lazy evaluation.
-
-##### Attention
-
-- If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
-- Returns a lazy `Sequence`.
-
-##### Example
-
-```swift
-print(Array(convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10])))
-// [(1, 3, 5, 7, 9), (2, 4, 6, 8, 10)]
-```
-
-##### Declaration
-
-```swift
-func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5) -> LazyConvolution5Sequence<T1, T2, T3, T4, T5>
-```
-
-##### Parameters
-
-- `sequence1` The first `Sequence`.
-- `sequence2` The second `Sequence`.
-- `sequence3` The third `Sequence`.
-- `sequence4` The fourth `Sequence`.
-- `sequence5` The fifth `Sequence`.
-
-##### Returns
-
-A convolution as a lazily evaluated `Sequence` of 5-tuples.
-
-#### `convolution(_:_:_:_:_:_:)`
-
-Creates a [convolution][convolution] from six `Sequence`s using lazy evaluation.
-
-##### Attention
-
-- If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
-- Returns a lazy `Sequence`.
-
-##### Example
-
-```swift
-print(Array(convolution([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12])))
-// [(1, 3, 5, 7, 9, 11), (2, 4, 6, 8, 10, 12)]
-```
-
-##### Declaration
-
-```swift
-func convolution <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence, T6: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5, _ sequence6: T6) -> LazyConvolution6Sequence<T1, T2, T3, T4, T5, T6>
-```
-
-##### Parameters
-
-- `sequence1` The first `Sequence`.
-- `sequence2` The second `Sequence`.
-- `sequence3` The third `Sequence`.
-- `sequence4` The fourth `Sequence`.
-- `sequence5` The fifth `Sequence`.
-- `sequence6` The sixth `Sequence`.
-
-##### Returns
-
-A convolution as a lazily evaluated `Sequence` of 6-tuples.
-
-#### `product(_:_:)`
-
-Creates a [Cartesian product][cartesian-product] from two `Sequence`s using lazy evaluation.
-
-##### Attention
-
-Returns a lazy `Sequence`.
-
-##### Example
+##### Examples
 
 ```swift
 print(Array(product([1, 2], [3, 4])))
 // [(1, 3), (1, 4), (2, 3), (2, 4)]
 ```
 
-##### Declaration
-
 ```swift
-func product <T1: Sequence, T2: Sequence> (_ sequence1: T1, _ sequence2: T2) -> LazyProduct2Sequence<T1, T2>
-```
-
-##### Parameters
-
-- `sequence1` The first `Sequence`.
-- `sequence2` The second `Sequence`.
-
-##### Returns
-
-A product as a lazily evaluated `Sequence` of 2-tuples.
-
-#### `product(_:_:_:)`
-
-Creates a [Cartesian product][cartesian-product] from three `Sequence`s using lazy evaluation.
-
-##### Attention
-
-Returns a lazy `Sequence`.
-
-##### Example
-
-```swift
-print(Array(product([1, 2], [3, 4], [5, 6]).take(4)))
+print(Array(product([1, 2], [3, 4], [5, 6]).prefix(4)))
 // [(1, 3, 5), (1, 3, 6), (1, 4, 5), (1, 4, 6)]
 ```
 
-##### Declaration
-
 ```swift
-func product <T1: Sequence, T2: Sequence, T3: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3) -> LazyProduct3Sequence<T1, T2, T3>
-```
-
-##### Parameters
-
-- `sequence1` The first `Sequence`.
-- `sequence2` The second `Sequence`.
-- `sequence3` The third `Sequence`.
-
-##### Returns
-
-A product as a lazily evaluated `Sequence` of 3-tuples.
-
-#### `product(_:_:_:_:)`
-
-Creates a [Cartesian product][cartesian-product] from four `Sequence`s using lazy evaluation.
-
-##### Attention
-
-Returns a lazy `Sequence`.
-
-##### Example
-
-```swift
-print(Array(product([1, 2], [3, 4], [5, 6], [7, 8]).take(4)))
+print(Array(product([1, 2], [3, 4], [5, 6], [7, 8]).prefix(4)))
 // [(1, 3, 5, 7), (1, 3, 5, 8), (1, 3, 6, 7), (1, 3, 6, 8)]
 ```
 
-##### Declaration
-
 ```swift
-func product <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4) -> LazyProduct4Sequence<T1, T2, T3, T4>
-```
-
-##### Parameters
-
-- `sequence1` The first `Sequence`.
-- `sequence2` The second `Sequence`.
-- `sequence3` The third `Sequence`.
-- `sequence4` The fourth `Sequence`.
-
-##### Returns
-
-A product as a lazily evaluated `Sequence` of 4-tuples.
-
-#### `product(_:_:_:_:_:)`
-
-Creates a [Cartesian product][cartesian-product] from five `Sequence`s using lazy evaluation.
-
-##### Attention
-
-Returns a lazy `Sequence`.
-
-##### Example
-
-```swift
-print(Array(product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10]).take(4)))
+print(Array(product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10]).prefix(4)))
 // [(1, 3, 5, 7, 9), (1, 3, 5, 7, 10), (1, 3, 5, 8, 9), (1, 3, 5, 8, 10)]
 ```
 
-##### Declaration
-
 ```swift
-func product <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5) -> LazyProduct5Sequence<T1, T2, T3, T4, T5>
-```
-
-##### Parameters
-
-- `sequence1` The first `Sequence`.
-- `sequence2` The second `Sequence`.
-- `sequence3` The third `Sequence`.
-- `sequence4` The fourth `Sequence`.
-- `sequence5` The fifth `Sequence`.
-
-##### Returns
-
-A product as a lazily evaluated `Sequence` of 5-tuples.
-
-#### `product(_:_:_:_:_:_:)`
-
-Creates a [Cartesian product][cartesian-product] from six `Sequence`s using lazy evaluation.
-
-##### Attention
-
-Returns a lazy `Sequence`.
-
-##### Example
-
-```swift
-print(Array(product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]).take(4)))
+print(Array(product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]).prefix(4)))
 // [(1, 3, 5, 7, 9, 11), (1, 3, 5, 7, 9, 12), (1, 3, 5, 7, 10, 11), (1, 3, 5, 7, 10, 12)]
 ```
 
-##### Declaration
-
-```swift
-func product <T1: Sequence, T2: Sequence, T3: Sequence, T4: Sequence, T5: Sequence, T6: Sequence> (_ sequence1: T1, _ sequence2: T2, _ sequence3: T3, _ sequence4: T4, _ sequence5: T5, _ sequence6: T6) -> LazyProduct6Sequence<T1, T2, T3, T4, T5, T6>
-```
-
 ##### Parameters
 
-- `sequence1` The first `Sequence`.
-- `sequence2` The second `Sequence`.
-- `sequence3` The third `Sequence`.
-- `sequence4` The fourth `Sequence`.
-- `sequence5` The fifth `Sequence`.
-- `sequence6` The sixth `Sequence`.
+- `sequence1`: The first `Sequence`.
+- `sequence2`: The second `Sequence`.
+- (`sequence3`: The third `Sequence`.)
+- (`sequence4`: The fourth `Sequence`.)
+- (`sequence5`: The five `Sequence`.)
+- (`sequence6`: The six `Sequence`.)
 
 ##### Returns
 
-A product as a lazily evaluated `Sequence` of 6-tuples.
+A Cartesian product as a `Sequence` of n-tuples.
 
-### Property Extensions on `LazySequenceProtocol`
+#### `zip(` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`
 
-#### `cycle`
+Creates the zip of three `Sequence`s as a `Sequence` of n-tuples.
 
-Creates a lazily evaluated `Sequence` that infinitely repeats the elements of `self`.
-
-##### Example
+##### Declarations
 
 ```swift
-print(Array([1, 2, 3].lazy.cycle.take(10)))
-// [1, 2, 3, 1, 2, 3, 1, 2, 3, 1]
+public func zip <Sequence1: Sequence, Sequence2: Sequence, Sequence3: Sequence> (_ sequence1: Sequence1, _ sequence2: Sequence2, _ sequence3: Sequence3) -> AnySequence<(Sequence1.Element, Sequence2.Element, Sequence3.Element)>
 ```
-
-##### Declaration
 
 ```swift
-var cycle: LazyCycleSequence<Self>
+public func zip <Sequence1: Sequence, Sequence2: Sequence, Sequence3: Sequence, Sequence4: Sequence> (_ sequence1: Sequence1, _ sequence2: Sequence2, _ sequence3: Sequence3, _ sequence4: Sequence4) -> AnySequence<(Sequence1.Element, Sequence2.Element, Sequence3.Element, Sequence4.Element)>
 ```
 
-#### `reverse`
+```swift
+public func zip <Sequence1: Sequence, Sequence2: Sequence, Sequence3: Sequence, Sequence4: Sequence, Sequence5: Sequence> (_ sequence1: Sequence1, _ sequence2: Sequence2, _ sequence3: Sequence3, _ sequence4: Sequence4, _ sequence5: Sequence5) -> AnySequence<(Sequence1.Element, Sequence2.Element, Sequence3.Element, Sequence4.Element, Sequence5.Element)>
+```
 
-Creates a lazily evaluated `Sequence` in which the elements of `self` are in reverse order.
+```swift
+public func zip <Sequence1: Sequence, Sequence2: Sequence, Sequence3: Sequence, Sequence4: Sequence, Sequence5: Sequence, Sequence6: Sequence> (_ sequence1: Sequence1, _ sequence2: Sequence2, _ sequence3: Sequence3, _ sequence4: Sequence4, _ sequence5: Sequence5, _ sequence6: Sequence6) -> AnySequence<(Sequence1.Element, Sequence2.Element, Sequence3.Element, Sequence4.Element, Sequence5.Element, Sequence6.Element)>
+```
+
+##### Examples
+
+```swift
+print(Array(zip([1, 2], [3, 4])))
+// [(1, 3), (2, 4)]
+```
+
+```swift
+print(Array(zip([1, 2], [3, 4], [5, 6], [7, 8])))
+// [(1, 3, 5, 7), (2, 4, 6, 8)]
+```
+
+```swift
+print(Array(zip([1, 2], [3, 4], [5, 6], [7, 8], [9, 10])))
+// [(1, 3, 5, 7, 9), (2, 4, 6, 8, 10)]
+```
+
+```swift
+print(Array(zip([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12])))
+// [(1, 3, 5, 7, 9, 11), (2, 4, 6, 8, 10, 12)]
+```
 
 ##### Attention
 
-`Self` must be finite.
-
-##### Complexity
-
-The first operation is O(n + 1). Consecutive operations are O(1).
-
-##### Example
-
-```swift
-print(Array([1, 2, 3].lazy.reverse))
-// [3, 2, 1]
-```
-
-##### Declaration
-
-```swift
-var reverse: LazyReverseSequence<Self>
-```
-
-### Method Extensions on `LazySequenceProtocol`
-
-#### `drop(first:)`
-
-Creates a lazily evaluated `Sequence` containing all but the first number of elements of `self`. Unlike `removeFirst(_ n:)`, `drop(first:)` is non-mutating.
-
-##### Attention
-
-If the number of elements to drop exceeds the number of elements in `self`, the result is an empty `Sequence`.
-
-##### Precondition
-
-```swift
-numberOfElements >= 0
-```
-
-##### Example
-
-```swift
-print(Array([1, 2, 3, 4, 5].lazy.drop(first: 3)))
-// [4, 5]
-```
-
-##### Declaration
-
-```swift
-func drop (first numberOfElements: Int) -> LazyDropFirstSequence<Self>
-```
+If the `Sequence`s are of different lengths, the resulting `Sequence` is the same length as the shortest `Sequence`.
 
 ##### Parameters
 
-- `numberOfElements` Specifies the first number of elements to drop from `self`.
+- `sequence1`: The first `Sequence`.
+- `sequence2`: The second `Sequence`.
+- `sequence3`: The third `Sequence`.
+- (`sequence4`: The fourth `Sequence`.)
+- (`sequence5`: The five `Sequence`.)
+- (`sequence6`: The six `Sequence`.)
 
 ##### Returns
 
-A lazily evaluated `Sequence` containing all but the first number of elements of `self`.
-
-#### `drop(last:)`
-
-Creates a lazily evaluated `Sequence` containing all but the last number of elements of `self`. Unlike `removeLast(_ n:)`, `drop(last:)` is non-mutating.
-
-##### Attention
-
-If the number of elements to drop exceeds the number of elements in `self`, the result is an empty `Sequence`.
-
-##### Precondition
-
-```swift
-numberOfElements >= 0
-```
-
-##### Example
-
-```swift
-print(Array([1, 2, 3, 4, 5].lazy.drop(last: 3)))
-// [1, 2]
-```
-
-##### Declaration
-
-```swift
-func drop (last numberOfElements: Int) -> LazyDropLastSequence<Self>
-```
-
-##### Parameters
-
-- `numberOfElements` Specifies the last number of elements to drop from `self`.
-
-##### Returns
-
-A lazily evaluated `Sequence` containing all but the last number of elements of `self`.
-
-#### `intersperse(_:)`
-
-Creates a lazily evaluated `Sequence` in which `element` is interspersed between the elements of `self`.
-
-##### Example
-
-```swift
-print(Array([1, 1, 1].lazy.intersperse(2)))
-// [1, 2, 1, 2, 1]
-```
-
-##### Declaration
-
-```swift
-func intersperse (_ element: Element) -> LazyIntersperseSequence<Self>
-```
-
-##### Parameters
-
-- `element` The element to intersperse.
-
-##### Returns
-
-A lazily evaluated `Sequence` in which `element` is interspersed between the elements of `self`.
-
-#### `span(_:)`
-
-Creates a tuple of which the first element is a lazily evaluated `Sequence` that contains the initial, consecutive elements that satisfy the given predicate and the second element is a lazily evaluated `Sequence` that contains the remainder of the list.
-
-##### Example
-
-```swift
-let (satisfiedElements, remainderElements) = [1, 2, 3, 4, 1, 2, 3, 4].lazy.span{$0 < 3}
-
-print(Array(satisfiedElements))
-// [1, 2]
-
-print(Array(remainderElements))
-// [3, 4, 1, 2, 3, 4]
-```
-
-##### Declaration
-
-```swift
-func span (_ predicate: @escaping (Element) -> Bool) -> (LazyTakeWhileSequence<Self>, LazyDropWhileSequence<Elements>)
-```
-
-##### Parameters
-
-- `predicate` A closure that takes an element of the sequence as its argument and returns a Boolean value indicating whether the element should be included in the first element of the result.
-
-##### Returns
-
-A tuple of which the first element is a lazily evaluated `Sequence` that contains the initial, consecutive elements that satisfy the given predicate and the second element is a lazily evaluated `Sequence` that contains the remainder of the list.
-
-#### `take(first:)`
-
-Creates a lazily evaluated `Sequence` containing the first number of elements of `self`. Unlike `prefix(_ maxLength:)`, `take(first:)` will guarantee to return a lazy `Sequence` when operating on a lazy `Sequence`.
-
-##### Example
-
-```swift
-print(Array([1, 2, 3, 4, 5].lazy.take(first: 3)))
-// [1, 2, 3]
-```
-
-##### Precondition
-
-```swift
-numberOfElements >= 0
-```
-
-##### Declaration
-
-```swift
-func take (first numberOfElements: Int) -> LazyTakeFirstSequence<Self>
-```
-
-##### Parameters
-
-- `numberOfElements` Specifies the number of elements to take from the start of `self`.
-
-##### Returns
-
-A lazily evaluated `Sequence` that takes the number of elements from the start of `self`.
-
-#### `take(last:)`
-
-Creates a lazily evaluated `Sequence` containing the last number of elements of `self`. Unlike `suffix(_ maxLength:)`, `take(last:)` will guarantee to return a lazy `Sequence` when operating on a lazy `Sequence`.
-
-##### Example
-
-```swift
-print(Array([1, 2, 3, 4, 5].lazy.take(last: 3)))
-// [3, 4, 5]
-```
-
-##### Precondition
-
-```swift
-numberOfElements >= 0
-```
-
-##### Declaration
-
-```swift
-func take (last numberOfElements: Int) -> LazyTakeLastSequence<Self>
-```
-
-##### Parameters
-
-- `numberOfElements` Specifies the number of elements to take from the end of `self`.
-
-##### Returns
-
-A lazily evaluated `Sequence` that takes the number of elements from the end of `self`.
-
-#### `take(while:)`
-
-Creates a lazily evaluated `Sequence` containing the initial, consecutive elements that satisfy the given predicate. Identical to `prefix(while:)`.
-
-##### Example
-
-```swift
-print(Array([1, 2, 3, 4, 5].lazy.take(while: {$0 <= 3})))
-// [1, 2, 3]
-```
-
-##### Declaration
-
-```swift
-func take (while predicate: @escaping (Element) -> Bool) -> LazyTakeWhileSequence<Self>
-```
-
-##### Parameters
-
-- `predicate` A closure that takes an element of the sequence as its argument and returns a Boolean value indicating whether the element should be included in the result.
-
-##### Returns
-
-A lazily evaluated `Sequence` that contains the consecutive elements that satisfy the predicate.
-
-<!-- Images -->
-[language-badge]: https://img.shields.io/badge/Language-Swift%204-F04C3E.svg
-[license-badge]: https://img.shields.io/badge/License-MIT-lightgrey.svg
-
-<!-- Links -->
-[license]: https://github.com/dennisvennink/SequenceExtensions/blob/master/LICENSE.md
-[lazysequenceprotocol]: https://developer.apple.com/documentation/swift/lazysequenceprotocol
-[sequence]: https://developer.apple.com/documentation/swift/sequence
-[convolution]: https://en.wikipedia.org/wiki/Convolution_(computer_science)
-[cartesian-product]: https://en.wikipedia.org/wiki/Cartesian_product
+A zip as a `Sequence` of n-tuples.
