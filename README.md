@@ -2,7 +2,7 @@
 
 ![Requires Swift > 4](https://img.shields.io/badge/Language-Swift%204-F04C3E.svg) ![Licensed under the MIT license](https://img.shields.io/badge/License-MIT-lightgrey.svg)
 
-_SequenceExtensions_ is a library that adds various missing operations related to `Sequence`s.
+_SequenceExtensions_ is a library that adds various `Sequence`-related operations.
 
 ## Table Of Contents
 
