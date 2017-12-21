@@ -34,7 +34,7 @@ let package = Package(
     .library(name: "Example", targets: ["Example"])
   ],
   dependencies: [
-    .package(url: "https://github.com/dennisvennink/SequenceExtensions", from: "2.0.0")
+    .package(url: "https://github.com/dennisvennink/SequenceExtensions.git", from: "2.0.0")
   ],
   targets: [
     .target(name: "Example", dependencies: ["SequenceExtensions"]),
