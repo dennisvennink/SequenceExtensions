@@ -2,15 +2,6 @@ import XCTest
 @testable import SequenceExtensions
 
 class ZipTests: XCTestCase {
-  func testShouldReturnCorrectType () {
-    XCTAssertTrue(type(of: zip([1, 2], [3, 4], [5, 6])) == AnySequence<(Int, Int, Int)>.self)
-    XCTAssertTrue(type(of: zip([1, 2], [3, 4], [5, 6], [7, 8])) == AnySequence<(Int, Int, Int, Int)>.self)
-    XCTAssertTrue(type(of: zip([1, 2], [3, 4], [5, 6], [7, 8], [9, 10])) == AnySequence<(Int, Int, Int, Int,
-      Int)>.self)
-    XCTAssertTrue(type(of: zip([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12])) == AnySequence<(Int, Int, Int, Int,
-      Int, Int)>.self)
-  }
-
   func testShouldReturnCorrectValue () {
     XCTAssertTrue(Array(zip([], [], [])) == [(Int, Int, Int)]())
     XCTAssertTrue(Array(zip([1, 2], [3, 4], [])) == [(Int, Int, Int)]())

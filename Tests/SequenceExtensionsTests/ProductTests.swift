@@ -2,16 +2,6 @@ import XCTest
 @testable import SequenceExtensions
 
 class ProductTests: XCTestCase {
-  func testShouldReturnCorrectType () {
-    XCTAssertTrue(type(of: product([1, 2], [3, 4])) == AnySequence<(Int, Int)>.self)
-    XCTAssertTrue(type(of: product([1, 2], [3, 4], [5, 6])) == AnySequence<(Int, Int, Int)>.self)
-    XCTAssertTrue(type(of: product([1, 2], [3, 4], [5, 6], [7, 8])) == AnySequence<(Int, Int, Int, Int)>.self)
-    XCTAssertTrue(type(of: product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10])) == AnySequence<(Int, Int, Int, Int,
-      Int)>.self)
-    XCTAssertTrue(type(of: product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12])) == AnySequence<(Int, Int, Int,
-      Int, Int, Int)>.self)
-  }
-
   func testShouldReturnCorrectValue () {
     XCTAssertTrue(Array(product([], [])) == [(Int, Int)]())
     XCTAssertTrue(Array(product([1, 2], [])) == [(Int, Int)]())

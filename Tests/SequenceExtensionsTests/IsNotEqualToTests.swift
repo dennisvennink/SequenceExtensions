@@ -2,7 +2,7 @@ import XCTest
 @testable import SequenceExtensions
 
 class IsNotEqualToTests: XCTestCase {
-  func testShouldReturnCorrectValueAndType () {
+  func testShouldReturnCorrectValue () {
     XCTAssertFalse([(Int, Int)]() != [(Int, Int)]())
     XCTAssertTrue([(Int, Int)]() != [(0, 0)])
     XCTAssertTrue([(Int, Int)]() != [(0, 0), (0, 0)])
