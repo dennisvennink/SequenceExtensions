@@ -17,6 +17,10 @@ _SequenceExtensions_ is a library that adds various `Sequence`-related operation
     - [Free Functions](#free-functions)
         - [`product(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`](#product-__-___-____-_____-______-)
         - [`zip(` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`](#zip-___-____-_____-______-)
+    - [Property Extensions on `Sequence`](#property-extensions-on-sequence)
+        - [`duplicates`](#duplicates)
+        - [`occurrences`](#occurrences)
+        - [`uniques`](#uniques)
 
 ## Installation
 
@@ -34,7 +38,7 @@ let package = Package(
     .library(name: "Example", targets: ["Example"])
   ],
   dependencies: [
-    .package(url: "https://github.com/dennisvennink/SequenceExtensions.git", from: "2.0.0")
+    .package(url: "https://github.com/dennisvennink/SequenceExtensions.git", from: "2.1.0")
   ],
   targets: [
     .target(name: "Example", dependencies: ["SequenceExtensions"]),
@@ -85,8 +89,6 @@ swift test
 
 #### `==(_:_:)`
 
-Compares whether the left-hand `Sequence` of n-tuples is equal to the right-hand `Sequence` of n-tuples.
-
 ##### Declarations
 
 ```swift
@@ -109,7 +111,9 @@ public func == <Sequence1: Sequence, Sequence2: Sequence, Equatable1: Equatable,
 public func == <Sequence1: Sequence, Sequence2: Sequence, Equatable1: Equatable, Equatable2: Equatable, Equatable3: Equatable, Equatable4: Equatable, Equatable5: Equatable, Equatable6: Equatable> (lhs: Sequence1, rhs: Sequence2) -> Bool where Sequence1.Element == (Equatable1, Equatable2, Equatable3, Equatable4, Equatable5, Equatable6), Sequence2.Element == (Equatable1, Equatable2, Equatable3, Equatable4, Equatable5, Equatable6)
 ```
 
-##### Examples
+##### Description
+
+Compares whether the left-hand `Sequence` of n-tuples is equal to the right-hand `Sequence` of n-tuples.
 
 ```swift
 print([(0, 1)] == [(0, 1)])
@@ -147,8 +151,6 @@ A `Bool`ean value indicating whether the left-hand `Sequence` of n-tuples is equ
 
 #### `!=(_:_:)`
 
-Compares whether the left-hand `Sequence` of n-tuples is not equal to the right-hand `Sequence` of n-tuples.
-
 ##### Declarations
 
 ```swift
@@ -171,7 +173,9 @@ public func != <Sequence1: Sequence, Sequence2: Sequence, Equatable1: Equatable,
 public func != <Sequence1: Sequence, Sequence2: Sequence, Equatable1: Equatable, Equatable2: Equatable, Equatable3: Equatable, Equatable4: Equatable, Equatable5: Equatable, Equatable6: Equatable> (lhs: Sequence1, rhs: Sequence2) -> Bool where Sequence1.Element == (Equatable1, Equatable2, Equatable3, Equatable4, Equatable5, Equatable6), Sequence2.Element == (Equatable1, Equatable2, Equatable3, Equatable4, Equatable5, Equatable6)
 ```
 
-##### Examples
+##### Description
+
+Compares whether the left-hand `Sequence` of n-tuples is not equal to the right-hand `Sequence` of n-tuples.
 
 ```swift
 print([(0, 1)] != [(0, 2)])
@@ -211,8 +215,6 @@ A `Bool`ean value indicating whether the left-hand `Sequence` of n-tuples is not
 
 #### `product(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`
 
-Creates the Cartesian product of two `Sequence`s as a `Sequence` of n-tuples.
-
 ##### Declarations
 
 ```swift
@@ -235,7 +237,9 @@ public func product <Sequence1: Sequence, Sequence2: Sequence, Sequence3: Sequen
 public func product <Sequence1: Sequence, Sequence2: Sequence, Sequence3: Sequence, Sequence4: Sequence, Sequence5: Sequence, Sequence6: Sequence> (_ sequence1: Sequence1, _ sequence2: Sequence2, _ sequence3: Sequence3, _ sequence4: Sequence4, _ sequence5: Sequence5, _ sequence6: Sequence6) -> AnySequence<(Sequence1.Element, Sequence2.Element, Sequence3.Element, Sequence4.Element, Sequence5.Element, Sequence6.Element)>
 ```
 
-##### Examples
+##### Description
+
+Creates the Cartesian product of two `Sequence`s as a `Sequence` of n-tuples.
 
 ```swift
 print(Array(product([1, 2], [3, 4])))
@@ -277,8 +281,6 @@ A Cartesian product as a `Sequence` of n-tuples.
 
 #### `zip(` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`
 
-Creates the zip of three `Sequence`s as a `Sequence` of n-tuples.
-
 ##### Declarations
 
 ```swift
@@ -297,7 +299,9 @@ public func zip <Sequence1: Sequence, Sequence2: Sequence, Sequence3: Sequence, 
 public func zip <Sequence1: Sequence, Sequence2: Sequence, Sequence3: Sequence, Sequence4: Sequence, Sequence5: Sequence, Sequence6: Sequence> (_ sequence1: Sequence1, _ sequence2: Sequence2, _ sequence3: Sequence3, _ sequence4: Sequence4, _ sequence5: Sequence5, _ sequence6: Sequence6) -> AnySequence<(Sequence1.Element, Sequence2.Element, Sequence3.Element, Sequence4.Element, Sequence5.Element, Sequence6.Element)>
 ```
 
-##### Examples
+##### Description
+
+Creates the zip of three `Sequence`s as a `Sequence` of n-tuples.
 
 ```swift
 print(Array(zip([1, 2], [3, 4])))
@@ -335,3 +339,60 @@ If the `Sequence`s are of different lengths, the resulting `Sequence` is the sam
 ##### Returns
 
 A zip as a `Sequence` of n-tuples.
+
+### Property Extensions on `Sequence`
+
+#### `duplicates`
+
+##### Declaration
+
+```swift
+var duplicates: [Element] { get }
+```
+
+##### Description
+
+Returns an `Array` containing all duplicate values.
+
+```swift
+print([0, 1, 1, 2, 2, 2].duplicates)
+// [1, 2, 2]
+```
+
+##### Note
+
+To get unique duplicate values call `duplicates.uniques`.
+
+#### `occurrences`
+
+##### Declaration
+
+```swift
+var occurrences: [Element : Int] { get }
+```
+
+##### Description
+
+Returns a `Dictionary` containing the occurrence of each value.
+
+```swift
+print([0, 1, 1, 2, 2, 2].occurrences)
+// [0: 1, 1: 2, 2: 3]
+```
+
+#### `uniques`
+
+##### Declaration
+
+```swift
+var uniques: [Element] { get }
+```
+
+##### Description
+
+Returns an `Array` containing all unique values.
+
+```swift
+print([0, 1, 1, 2, 2, 2].uniques)
+// [0, 1, 2]
+```
