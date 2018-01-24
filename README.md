@@ -370,7 +370,7 @@ var occurrences: [Element: [Int]] { get }
 
 ##### Description
 
-Returns a `Dictionary` containing the occurrencing elements in `self` as keys and the offsets of each occurrencing element starting from zero as values.
+Returns a `Dictionary` containing the occurring elements in `self` as keys and the offsets of each occurring element starting from zero as values.
 
 ```swift
 print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences)
@@ -389,7 +389,7 @@ func occurrences (of elements: [Element]) -> [Element: [Int]]
 
 ##### Description
 
-Returns a `Dictionary` containing the occurrencing elements in `elements` as keys and the offset, starting from zero, of each occurrencing element as values.
+Returns a `Dictionary` containing the occurring elements in `elements` as keys and the offset, starting from zero, of each occurring element as values.
 
 ```swift
 print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences(of: [1, 3]))
@@ -398,8 +398,8 @@ print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences(of: [1, 3]))
 
 ##### Parameters
 
-- `elements`: The `Element`s to get the occurrencing elements of.
+- `elements`: The `Element`s to get the occurring elements of.
 
 ##### Returns
 
-A `Dictionary` containing the occurrencing elements in `elements` as keys and the offset, starting from zero, of each occurrencing element as values.
+A `Dictionary` containing the occurring elements in `elements` as keys and the offset, starting from zero, of each occurring element as values.
