@@ -20,7 +20,8 @@ _SequenceExtensions_ is a library that adds various `Sequence`-related operation
     - [Property Extensions on `Sequence`](#property-extensions-on-sequence)
         - [`duplicates`](#duplicates)
         - [`occurrences`](#occurrences)
-        - [`uniques`](#uniques)
+    - [Method Extensions on `Sequence`](#method-extensions-on-sequence)
+        - [`occurrences(of:)`](#occurrencesof)
 
 ## Installation
 
@@ -38,7 +39,7 @@ let package = Package(
     .library(name: "Example", targets: ["Example"])
   ],
   dependencies: [
-    .package(url: "https://github.com/dennisvennink/SequenceExtensions.git", from: "2.1.0")
+    .package(url: "https://github.com/dennisvennink/SequenceExtensions.git", from: "3.0.0")
   ],
   targets: [
     .target(name: "Example", dependencies: ["SequenceExtensions"]),
@@ -347,52 +348,58 @@ A zip as a `Sequence` of n-tuples.
 ##### Declaration
 
 ```swift
-var duplicates: [Element] { get }
+var duplicates: [Element: [Int]] { get }
 ```
 
 ##### Description
 
-Returns an `Array` containing all duplicate values.
+Returns a `Dictionary` containing the duplicate elements in `self` as keys and the offsets of each duplicate element starting from zero as values.
 
 ```swift
-print([0, 1, 1, 2, 2, 2].duplicates)
-// [1, 2, 2]
+print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].duplicates)
+// [1: [2], 2: [4, 5], 3: [7, 8, 9]]
 ```
-
-##### Note
-
-To get unique duplicate values call `duplicates.uniques`.
 
 #### `occurrences`
 
 ##### Declaration
 
 ```swift
-var occurrences: [Element : Int] { get }
+var occurrences: [Element: [Int]] { get }
 ```
 
 ##### Description
 
-Returns a `Dictionary` containing the occurrence of each value.
+Returns a `Dictionary` containing the occurrencing elements in `self` as keys and the offsets of each occurrencing element starting from zero as values.
 
 ```swift
-print([0, 1, 1, 2, 2, 2].occurrences)
-// [0: 1, 1: 2, 2: 3]
+print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences)
+// [0: [0], 1: [1, 2], 2: [3, 4, 5], 3: [6, 7, 8, 9]]
 ```
 
-#### `uniques`
+### Method Extensions on `Sequence`
+
+#### `occurrences(of:)`
 
 ##### Declaration
 
 ```swift
-var uniques: [Element] { get }
+func occurrences (of elements: [Element]) -> [Element: [Int]]
 ```
 
 ##### Description
 
-Returns an `Array` containing all unique values.
+Returns a `Dictionary` containing the occurrencing elements in `elements` as keys and the offset, starting from zero, of each occurrencing element as values.
 
 ```swift
-print([0, 1, 1, 2, 2, 2].uniques)
-// [0, 1, 2]
+print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences(of: [1, 3]))
+// [1: [1, 2], 3: [6, 7, 8, 9]]
 ```
+
+##### Parameters
+
+- `elements`: The `Element`s to get the occurrencing elements of.
+
+##### Returns
+
+A `Dictionary` containing the occurrencing elements in `elements` as keys and the offset, starting from zero, of each occurrencing element as values.
