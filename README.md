@@ -273,8 +273,8 @@ print(Array(product([1, 2], [3, 4], [5, 6], [7, 8], [9, 10], [11, 12]).prefix(4)
 - `sequence2`: The second `Sequence`.
 - (`sequence3`: The third `Sequence`.)
 - (`sequence4`: The fourth `Sequence`.)
-- (`sequence5`: The five `Sequence`.)
-- (`sequence6`: The six `Sequence`.)
+- (`sequence5`: The fifth `Sequence`.)
+- (`sequence6`: The sixth `Sequence`.)
 
 ##### Returns
 
@@ -334,8 +334,8 @@ If the `Sequence`s are of different lengths, the resulting `Sequence` is the sam
 - `sequence2`: The second `Sequence`.
 - `sequence3`: The third `Sequence`.
 - (`sequence4`: The fourth `Sequence`.)
-- (`sequence5`: The five `Sequence`.)
-- (`sequence6`: The six `Sequence`.)
+- (`sequence5`: The fifth `Sequence`.)
+- (`sequence6`: The sixth `Sequence`.)
 
 ##### Returns
 
