@@ -2,7 +2,7 @@ import XCTest
 @testable import SequenceExtensions
 
 class SequenceTests: XCTestCase {
-  func testDuplicatesOfShouldReturnCorrectValue () {
+  func testDuplicatesOf () {
     XCTAssertTrue([Int]().duplicates.isEmpty)
 
     let duplicates = [0, 1, 1, 2, 2, 2, 3, 3, 3, 3].duplicates
@@ -13,7 +13,7 @@ class SequenceTests: XCTestCase {
     XCTAssertEqual(duplicates[3]!, [7, 8, 9])
   }
 
-  func testOccurrencesShouldReturnCorrectValue () {
+  func testOccurrences () {
     XCTAssertTrue([Int]().occurrences.isEmpty)
 
     let occurrences = [0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences
@@ -24,9 +24,9 @@ class SequenceTests: XCTestCase {
     XCTAssertEqual(occurrences[3]!, [6, 7, 8, 9])
   }
 
-  func testOccurrencesOfShouldReturnCorrectValue () {
-    XCTAssertTrue([Int]().occurrences(of: [Int]()).isEmpty)
-    XCTAssertTrue([Int]().occurrences(of: [0]).isEmpty)
+  func testOccurrencesOfElements () {
+    XCTAssertTrue([Int]().occurrences(of: []).isEmpty)
+    XCTAssertTrue([].occurrences(of: [0]).isEmpty)
 
     let occurrences = [0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences(of: [1, 3])
 
@@ -34,5 +34,11 @@ class SequenceTests: XCTestCase {
     XCTAssertEqual(occurrences[1]!, [1, 2])
     XCTAssertNil(occurrences[2])
     XCTAssertEqual(occurrences[3]!, [6, 7, 8, 9])
+  }
+
+  func testOccurrencesOfElement () {
+    XCTAssertTrue([].occurrences(of: 4).isEmpty)
+    XCTAssertEqual([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences(of: 4), [])
+    XCTAssertEqual([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences(of: 2), [3, 4, 5])
   }
 }

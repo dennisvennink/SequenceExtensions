@@ -2,10 +2,9 @@
 
 ![Requires Swift > 4](https://img.shields.io/badge/Language-Swift%204-F04C3E.svg) ![Licensed under the MIT license](https://img.shields.io/badge/License-MIT-lightgrey.svg)
 
-_SequenceExtensions_ is a library that adds various `Sequence`-related operations.
-
 ## Table Of Contents
 
+- [Introduction](#introduction)
 - [Installation](#installation)
     - [Swift Package Manager](#swift-package-manager)
 - [Contributing](#contributing)
@@ -22,6 +21,11 @@ _SequenceExtensions_ is a library that adds various `Sequence`-related operation
         - [`occurrences`](#occurrences)
     - [Method Extensions on `Sequence`](#method-extensions-on-sequence)
         - [`occurrences(of:)`](#occurrencesof)
+        - [`occurrences(of:)`](#occurrencesof-1)
+
+## Introduction
+
+_SequenceExtensions_ is a library that adds various `Sequence`-related operations.
 
 ## Installation
 
@@ -39,7 +43,7 @@ let package = Package(
     .library(name: "Example", targets: ["Example"])
   ],
   dependencies: [
-    .package(url: "https://github.com/dennisvennink/SequenceExtensions.git", from: "3.0.1")
+    .package(url: "https://github.com/dennisvennink/SequenceExtensions.git", from: "3.1.0")
   ],
   targets: [
     .target(name: "Example", dependencies: ["SequenceExtensions"]),
@@ -353,7 +357,7 @@ var duplicates: [Element: [Int]] { get }
 
 ##### Description
 
-Returns a `Dictionary` containing the duplicate elements in `self` as keys and the offsets of each duplicate element starting from zero as values.
+Returns a `Dictionary` in which the keys correspond to all `Element`s in `self` that contain duplicates and the values to their duplicates in `self` as an `Array` of `Int`eger offsets.
 
 ```swift
 print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].duplicates)
@@ -370,7 +374,7 @@ var occurrences: [Element: [Int]] { get }
 
 ##### Description
 
-Returns a `Dictionary` containing the occurring elements in `self` as keys and the offsets of each occurring element starting from zero as values.
+Returns a `Dictionary` in which the keys correspond to all `Element`s in `self` and the values to their occurrences in `self` as an `Array` of `Int`eger offsets.
 
 ```swift
 print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences)
@@ -389,7 +393,7 @@ func occurrences (of elements: [Element]) -> [Element: [Int]]
 
 ##### Description
 
-Returns a `Dictionary` containing the occurring elements in `elements` as keys and the offset, starting from zero, of each occurring element as values.
+Returns a `Dictionary` in which the keys correspond to the `Element`s in `elements` and the values to their occurrences in `self` as an `Array` of `Int`eger offsets.
 
 ```swift
 print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences(of: [1, 3]))
@@ -398,8 +402,33 @@ print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences(of: [1, 3]))
 
 ##### Parameters
 
-- `elements`: The `Element`s to get the occurring elements of.
+- `elements`: The `Element`s to get the occurrences of.
 
 ##### Returns
 
-A `Dictionary` containing the occurring elements in `elements` as keys and the offset, starting from zero, of each occurring element as values.
+A `Dictionary` in which the keys correspond to the `Element`s in `elements` and the values to their occurrences in `self` as an `Array` of `Int`eger offsets.
+
+#### `occurrences(of:)`
+
+##### Declaration
+
+```swift
+func occurrences (of element: Element) -> [Int]
+```
+
+##### Description
+
+Returns an `Array` containing the occurrences of `element` in `self` as `Int`eger offsets.
+
+```swift
+print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences(of: 2))
+// [3, 4, 5]
+```
+
+##### Parameters
+
+- `element`: The `Element` to get the occurrences of.
+
+##### Returns
+
+An `Array` containing the occurrences of `element` in `self` as `Int`eger offsets.
