@@ -12,16 +12,21 @@
 - [API](#api)
     - [Operator Overloads](#operator-overloads)
         - [`!=(_:_:)`](#__)
-        - [`==(_:_:)`](#__)
+        - [`==(_:_:)`](#__-1)
     - [Free Functions](#free-functions)
         - [`product(` `_:_:` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`](#product-__-___-____-_____-______-)
         - [`zip(` `_:_:_:` `_:_:_:_:` `_:_:_:_:_:` `_:_:_:_:_:_:` `)`](#zip-___-____-_____-______-)
-    - [Property Extensions on `Sequence`](#property-extensions-on-sequence)
-        - [`duplicates`](#duplicates)
-        - [`occurrences`](#occurrences)
-    - [Method Extensions on `Sequence`](#method-extensions-on-sequence)
-        - [`occurrences(of:)`](#occurrencesof)
-        - [`occurrences(of:)`](#occurrencesof-1)
+    - [Property Extensions On `Sequence`](#property-extensions-on-sequence)
+        - [Where `Element: Equatable`](#where-element-equatable)
+            - [`containsDuplicates`](#containsduplicates)
+        - [Where `Element: Hashable`](#where-element-hashable)
+            - [`duplicates`](#duplicates)
+            - [`occurrences`](#occurrences)
+    - [Method Extensions On `Sequence`](#method-extensions-on-sequence)
+        - [Where `Element: Equatable`](#where-element-equatable-1)
+            - [`occurrences(of:)`](#occurrencesof)
+        - [Where `Element: Hashable`](#where-element-hashable-1)
+            - [`occurrences(of:)`](#occurrencesof-1)
 
 ## Introduction
 
@@ -43,7 +48,7 @@ let package = Package(
     .library(name: "Example", targets: ["Example"])
   ],
   dependencies: [
-    .package(url: "https://github.com/dennisvennink/SequenceExtensions.git", from: "3.1.0")
+    .package(url: "https://github.com/dennisvennink/SequenceExtensions.git", from: "4.0.0")
   ],
   targets: [
     .target(name: "Example", dependencies: ["SequenceExtensions"]),
@@ -347,15 +352,36 @@ A zip as a `Sequence` of n-tuples.
 
 ### Property Extensions on `Sequence`
 
-#### `duplicates`
+#### Where `Element: Equatable`
 
-##### Declaration
+##### `containsDuplicates`
+
+###### Declaration
+
+```swift
+var containsDuplicates: Bool { get }
+```
+
+###### Description
+
+Returns a `Bool`ean that specifies if `self` contains duplicates.
+
+```swift
+print([0, 1, 2].containsDuplicates)
+// false
+```
+
+#### Where `Element: Hashable`
+
+##### `duplicates`
+
+###### Declaration
 
 ```swift
 var duplicates: [Element: [Int]] { get }
 ```
 
-##### Description
+###### Description
 
 Returns a `Dictionary` in which the keys correspond to all `Element`s in `self` that contain duplicates and the values to their duplicates in `self` as an `Array` of `Int`eger offsets.
 
@@ -364,15 +390,15 @@ print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].duplicates)
 // [1: [2], 2: [4, 5], 3: [7, 8, 9]]
 ```
 
-#### `occurrences`
+##### `occurrences`
 
-##### Declaration
+###### Declaration
 
 ```swift
 var occurrences: [Element: [Int]] { get }
 ```
 
-##### Description
+###### Description
 
 Returns a `Dictionary` in which the keys correspond to all `Element`s in `self` and the values to their occurrences in `self` as an `Array` of `Int`eger offsets.
 
@@ -381,42 +407,19 @@ print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences)
 // [0: [0], 1: [1, 2], 2: [3, 4, 5], 3: [6, 7, 8, 9]]
 ```
 
-### Method Extensions on `Sequence`
+### Method Extensions On `Sequence`
 
-#### `occurrences(of:)`
+#### Where `Element: Equatable`
 
-##### Declaration
+##### `occurrences(of:)`
 
-```swift
-func occurrences (of elements: [Element]) -> [Element: [Int]]
-```
-
-##### Description
-
-Returns a `Dictionary` in which the keys correspond to the `Element`s in `elements` and the values to their occurrences in `self` as an `Array` of `Int`eger offsets.
-
-```swift
-print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences(of: [1, 3]))
-// [1: [1, 2], 3: [6, 7, 8, 9]]
-```
-
-##### Parameters
-
-- `elements`: The `Element`s to get the occurrences of.
-
-##### Returns
-
-A `Dictionary` in which the keys correspond to the `Element`s in `elements` and the values to their occurrences in `self` as an `Array` of `Int`eger offsets.
-
-#### `occurrences(of:)`
-
-##### Declaration
+###### Declaration
 
 ```swift
 func occurrences (of element: Element) -> [Int]
 ```
 
-##### Description
+###### Description
 
 Returns an `Array` containing the occurrences of `element` in `self` as `Int`eger offsets.
 
@@ -425,10 +428,37 @@ print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences(of: 2))
 // [3, 4, 5]
 ```
 
-##### Parameters
+###### Parameters
 
 - `element`: The `Element` to get the occurrences of.
 
-##### Returns
+###### Returns
 
 An `Array` containing the occurrences of `element` in `self` as `Int`eger offsets.
+
+#### Where `Element: Hashable`
+
+##### `occurrences(of:)`
+
+###### Declaration
+
+```swift
+func occurrences (of elements: [Element]) -> [Element: [Int]]
+```
+
+###### Description
+
+Returns a `Dictionary` in which the keys correspond to the `Element`s in `elements` and the values to their occurrences in `self` as an `Array` of `Int`eger offsets.
+
+```swift
+print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences(of: [1, 3]))
+// [1: [1, 2], 3: [6, 7, 8, 9]]
+```
+
+###### Parameters
+
+- `elements`: The `Element`s to get the occurrences of.
+
+###### Returns
+
+A `Dictionary` in which the keys correspond to the `Element`s in `elements` and the values to their occurrences in `self` as an `Array` of `Int`eger offsets.

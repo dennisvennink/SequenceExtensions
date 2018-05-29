@@ -1,3 +1,39 @@
+public extension Sequence where Element: Equatable {
+  /// Returns a `Bool`ean that specifies if `self` contains duplicates.
+  ///
+  ///     print([0, 1, 2].containsDuplicates)
+  ///     // false
+  var containsDuplicates: Bool {
+    var uniques = [Element]()
+
+    for element in self {
+      if uniques.contains(element) {
+        return true
+      } else {
+        uniques.append(element)
+      }
+    }
+
+    return false
+  }
+
+  /// Returns an `Array` containing the occurrences of `element` in `self` as `Int`eger offsets.
+  ///
+  ///     print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences(of: 2))
+  ///     // [3, 4, 5]
+  ///
+  /// - Parameters:
+  ///   - element: The `Element` to get the occurrences of.
+  /// - Returns: An `Array` containing the occurrences of `element` in `self` as `Int`eger offsets.
+  func occurrences (of element: Element) -> [Int] {
+    return self.enumerated().reduce(into: []) {
+      if element == $1.element {
+        $0.append($1.offset)
+      }
+    }
+  }
+}
+
 public extension Sequence where Element: Hashable {
   /// Returns a `Dictionary` in which the keys correspond to all `Element`s in `self` that contain duplicates and the
   /// values to their duplicates in `self` as an `Array` of `Int`eger offsets.
@@ -41,22 +77,6 @@ public extension Sequence where Element: Hashable {
     return self.enumerated().reduce(into: [:]) {
       if elements.contains($1.element) {
         $0[$1.element, default: []].append($1.offset)
-      }
-    }
-  }
-
-  /// Returns an `Array` containing the occurrences of `element` in `self` as `Int`eger offsets.
-  ///
-  ///     print([0, 1, 1, 2, 2, 2, 3, 3, 3, 3].occurrences(of: 2))
-  ///     // [3, 4, 5]
-  ///
-  /// - Parameters:
-  ///   - element: The `Element` to get the occurrences of.
-  /// - Returns: An `Array` containing the occurrences of `element` in `self` as `Int`eger offsets.
-  func occurrences (of element: Element) -> [Int] {
-    return self.enumerated().reduce(into: []) {
-      if element == $1.element {
-        $0.append($1.offset)
       }
     }
   }
